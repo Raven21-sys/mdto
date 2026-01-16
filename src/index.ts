@@ -1,6 +1,5 @@
 import { handleUpload } from "./routes/upload.route";
 import { handleView } from "./routes/view.route";
-import htmlTemplate from "./templates/upload.template.html";
 import { isDev } from "./utils/env";
 import { html, text } from "./utils/response";
 
@@ -18,21 +17,6 @@ export default {
 		// GET /:prefix/:slug - View markdown as HTML
 		// GET / - Show upload page
 		if (method === "GET") {
-			if (pathname === "/") {
-				let template = htmlTemplate;
-				if (isDev(env)) {
-					template = template.replace(
-						/<script>[\s\S]*?posthog[\s\S]*?<\/script>/gi,
-						"",
-					);
-					template = template.replace(
-						/<script[\s\S]*?turnstile[\s\S]*?<\/script>/gi,
-						"",
-					);
-				}
-				return html(template);
-			}
-
 			// Parse /{prefix}/{slug} pattern
 			const parts = pathname.slice(1).split("/");
 

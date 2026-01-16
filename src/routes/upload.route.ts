@@ -24,6 +24,9 @@ export async function handleUpload(
 		const validExpirationDays = [1, 7, 14, 30];
 		const expirationDays = expirationParam ? parseInt(expirationParam, 10) : 30; // Default to 30 days
 
+		const themeParam = url.searchParams.get("theme");
+		const theme = themeParam || "default";
+
 		if (!validExpirationDays.includes(expirationDays)) {
 			return exception(
 				"Invalid expiration. Valid values are: 1, 7, 14, 30 (days)",
@@ -109,6 +112,9 @@ export async function handleUpload(
 		await env.BUCKET.put(key, htmlContent, {
 			httpMetadata: {
 				contentType: "text/html",
+			},
+			customMetadata: {
+				theme: theme,
 			},
 		});
 

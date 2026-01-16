@@ -25,7 +25,8 @@ export async function handleView(
 		}
 
 		const htmlContent = await object.text();
-		const htmlPage = createViewHtml(slug, htmlContent);
+		const theme = object.customMetadata?.theme || "default";
+		const htmlPage = createViewHtml(slug, htmlContent, theme);
 
 		return html(htmlPage);
 	} catch (error) {

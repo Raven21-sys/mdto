@@ -548,6 +548,101 @@
 			opacity: 1;
 			transform: translateX(-50%) translateY(-8px);
 		}
+
+		/* Preview Dialog */
+		.preview-overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, 0.8);
+			z-index: 1000;
+			align-items: center;
+			justify-content: center;
+			padding: 10px;
+			backdrop-filter: blur(4px);
+		}
+
+		.preview-overlay.visible {
+			display: flex;
+			animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+
+		.preview-dialog {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			width: 95vw;
+			max-width: 95vw;
+			height: 95vh;
+			max-height: 95vh;
+			display: flex;
+			flex-direction: column;
+			box-shadow: 
+				0 0 0 1px rgba(0,0,0,0.2),
+				0 20px 40px -10px rgba(0,0,0,0.6);
+			position: relative;
+		}
+
+		.preview-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 16px 20px;
+			border-bottom: 1px solid var(--border);
+		}
+
+		.preview-title {
+			font-size: 14px;
+			font-weight: 500;
+			color: var(--text-primary);
+		}
+
+		.preview-close {
+			width: 32px;
+			height: 32px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: transparent;
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			color: var(--text-secondary);
+			cursor: pointer;
+			transition: all 0.2s;
+		}
+
+		.preview-close:hover {
+			background: var(--surface-highlight);
+			border-color: var(--text-tertiary);
+			color: var(--text-primary);
+		}
+
+		.preview-content {
+			flex: 1;
+			overflow: auto;
+			position: relative;
+			min-height: 400px;
+		}
+
+		.preview-iframe {
+			width: 100%;
+			height: 100%;
+			min-height: 400px;
+			border: none;
+			display: block;
+		}
+
+		.preview-loading {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 60px 20px;
+			color: var(--text-secondary);
+			font-size: 13px;
+		}
 	</style>
 	<script>
     !((t,e)=> {var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=(i,s,a)=> {function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=(t)=> {var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=()=> u.toString(1)+".people (stub)",o="init rs ls yi ns us ts ss capture Hi calculateEventProperties vs register register_once register_for_session unregister unregister_for_session gs getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty fs ds createPersonProfile ps Qr opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing hs debug O cs getPageViewId captureTraceFeedback captureTraceMetric Kr".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)})(document,window.posthog||[]);
@@ -561,6 +656,9 @@
   	src="https://challenges.cloudflare.com/turnstile/v0/api.js"
   	async
   	defer
+	></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"
 	></script>
 </head>
 <body>
@@ -612,7 +710,24 @@
 					</div>
 				</div>
 				
+				<div class="expiration-section" style="display: block; margin-top: 16px;">
+					<div class="expiration-header">
+						<div class="expiration-label">Theme</div>
+					</div>
+					<div class="expiration-options" id="themeOptions">
+						<button type="button" class="option-btn active" data-value="default">Default</button>
+						<button type="button" class="option-btn" data-value="resume">Resume</button>
+					</div>
+				</div>
+				
 				<div class="actions">
+					<button class="btn btn-secondary" id="previewButton" disabled style="margin-bottom: 8px;">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+							<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+							<circle cx="12" cy="12" r="3"></circle>
+						</svg>
+						<span>Preview</span>
+					</button>
 					<button class="btn" id="uploadButton" disabled>
 						<span>Create Page</span>
 						<div class="loader"></div>
@@ -651,13 +766,32 @@
 		</div>
 	</div>
 
+	<!-- Preview Dialog -->
+	<div class="preview-overlay" id="previewOverlay">
+		<div class="preview-dialog">
+			<div class="preview-header">
+				<div class="preview-title" id="previewTitle">Preview</div>
+				<button class="preview-close" id="previewClose" type="button" aria-label="Close preview">
+					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<line x1="18" y1="6" x2="6" y2="18"></line>
+						<line x1="6" y1="6" x2="18" y2="18"></line>
+					</svg>
+				</button>
+			</div>
+			<div class="preview-content">
+				<div class="preview-loading" id="previewLoading">Loading preview...</div>
+				<iframe class="preview-iframe" id="previewIframe" style="display: none;"></iframe>
+			</div>
+		</div>
+	</div>
+
 	<div class="cf-turnstile" data-sitekey="0x4AAAAAACMzQnf-J0EKwNYD" data-appearance="interaction-only" style="align-self: center;"></div>
 
 	<div class="footer">
 		Press <span class="kbd">⌘ O</span> to browse files
 	</div>
 
-	<input type="file" id="fileInput" class="file-input" accept=".md,text/markdown,text/plain">
+	<input type="file" id="fileInput" class="file-input" accept=".md">
 
 	<script>
 		const uploadView = document.getElementById('uploadView');
@@ -670,9 +804,18 @@
 		const openLinkBtn = document.getElementById('openLinkBtn');
 		const resetButton = document.getElementById('resetButton');
 		const expirationDateEl = document.getElementById('expirationDate');
+		const expirationOptions = document.getElementById('expirationOptions');
+		const themeOptions = document.getElementById('themeOptions');
+		const previewButton = document.getElementById('previewButton');
+		const previewOverlay = document.getElementById('previewOverlay');
+		const previewClose = document.getElementById('previewClose');
+		const previewTitle = document.getElementById('previewTitle');
+		const previewLoading = document.getElementById('previewLoading');
+		const previewIframe = document.getElementById('previewIframe');
 		
 		let selectedFile = null;
 		let expirationDays = 30;
+		let selectedTheme = 'default';
 
 		function updateExpirationDate(days) {
 			const date = new Date();
@@ -718,6 +861,18 @@
 			}
 		});
 
+		// Theme Selection
+		themeOptions.addEventListener('click', (e) => {
+			if (e.target.classList.contains('option-btn')) {
+				// Remove active class from all
+				themeOptions.querySelectorAll('.option-btn').forEach(btn => { btn.classList.remove('active'); });
+				// Add active class to clicked
+				e.target.classList.add('active');
+				// Update value
+				selectedTheme = e.target.dataset.value;
+			}
+		});
+
 		// Drag and Drop
 		uploadArea.addEventListener('click', () => fileInput.click());
 
@@ -740,11 +895,26 @@
 
 		uploadArea.addEventListener('drop', (e) => {
 			const files = e.dataTransfer.files;
-			if (files.length > 0) handleFileSelect(files[0]);
+			if (files.length > 0) {
+				const file = files[0];
+				if (isValidMarkdownFile(file)) {
+					handleFileSelect(file);
+				} else {
+					showFileError();
+				}
+			}
 		});
 
 		fileInput.addEventListener('change', (e) => {
-			if (e.target.files.length > 0) handleFileSelect(e.target.files[0]);
+			if (e.target.files.length > 0) {
+				const file = e.target.files[0];
+				if (isValidMarkdownFile(file)) {
+					handleFileSelect(file);
+				} else {
+					showFileError();
+					fileInput.value = '';
+				}
+			}
 		});
 
 
@@ -760,7 +930,23 @@
 			<polyline points="14 2 14 8 20 8"></polyline>
 		`;
 
+		function isValidMarkdownFile(file) {
+			if (!file || !file.name) return false;
+			const fileName = file.name.toLowerCase();
+			return fileName.endsWith('.md');
+		}
+
+		function showFileError() {
+			alert('Please select a .md file only');
+		}
+
 		function handleFileSelect(file) {
+			// Validate file is markdown
+			if (!isValidMarkdownFile(file)) {
+				showFileError();
+				fileInput.value = '';
+				return;
+			}
 			selectedFile = file;
 			
 			// Update UI to show selection
@@ -776,6 +962,7 @@
 			`;
 			
 			uploadButton.disabled = false;
+			previewButton.disabled = false;
 		}
 
 		function resetUI() {
@@ -783,8 +970,8 @@
 			fileInput.value = '';
 			
 			// Reset text
-			uploadArea.querySelector('.upload-title').textContent = 'Write your page';
-			uploadArea.querySelector('.upload-desc').innerHTML = 'Drop your .md file here or click to browse<br><span style="opacity: 0.5; font-size: 11px; margin-top: 6px; display: inline-block;">Maximum 1MB</span>';
+			uploadArea.querySelector('.upload-title').textContent = 'Import Markdown';
+			uploadArea.querySelector('.upload-desc').innerHTML = 'Drop your .md file here or click to browse<br><span style="opacity: 0.5; font-size: 11px; margin-top: 6px; display: inline-block;">Maximum 100KB</span>';
 			
 			// Reset expiration to default (30 days)
 			expirationDays = 30;
@@ -793,12 +980,19 @@
 			});
 			updateExpirationDate(30);
 
+			// Reset theme to default
+			selectedTheme = 'default';
+			themeOptions.querySelectorAll('.option-btn').forEach(btn => {
+				btn.classList.toggle('active', btn.dataset.value === 'default');
+			});
+
 			// Reset styles
 			uploadArea.classList.remove('file-selected');
 			const iconWrapper = uploadArea.querySelector('.icon-wrapper svg');
 			iconWrapper.innerHTML = defaultIcon;
 			
 			uploadButton.disabled = true;
+			previewButton.disabled = true;
 			
 			// Toggle views
 			successView.classList.remove('visible');
@@ -826,6 +1020,98 @@
 			}, 2000);
 		});
 
+		// Preview functionality
+		function closePreview() {
+			previewOverlay.classList.remove('visible');
+			setTimeout(() => {
+				previewOverlay.style.display = 'none';
+				previewIframe.style.display = 'none';
+				previewLoading.style.display = 'flex';
+			}, 300);
+		}
+
+		previewClose.addEventListener('click', closePreview);
+		previewOverlay.addEventListener('click', (e) => {
+			if (e.target === previewOverlay) {
+				closePreview();
+			}
+		});
+
+		// Close preview on ESC key
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && previewOverlay.classList.contains('visible')) {
+				closePreview();
+			}
+		});
+
+		async function renderPreview() {
+			if (!selectedFile) return;
+
+			// Show loading state
+			previewOverlay.style.display = 'flex';
+			previewLoading.style.display = 'flex';
+			previewIframe.style.display = 'none';
+			previewTitle.textContent = `Preview - ${selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)}`;
+			
+			// Trigger reflow
+			void previewOverlay.offsetWidth;
+			previewOverlay.classList.add('visible');
+
+			try {
+				// Read file content
+				const markdown = await selectedFile.text();
+				
+				// Wait for marked to be available
+				if (typeof marked === 'undefined') {
+					throw new Error('Markdown parser not loaded');
+				}
+
+				// Convert markdown to HTML
+				const htmlContent = await marked.parse(markdown);
+
+				// Get theme path
+				const themePath = `/themes/${selectedTheme}.css`;
+				const themeName = selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1);
+
+				// Create HTML structure matching view.template.ts
+				const previewHtml = `<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Preview - ${themeName}</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="${themePath}">
+</head>
+<body>
+	<div class="content">
+		${htmlContent}
+	</div>
+	<footer>
+		<p>Powered by <a href="https://mdto.page">mdto.page</a></p>
+	</footer>
+</body>
+</html>`;
+
+				// Write to iframe
+				const iframeDoc = previewIframe.contentDocument || previewIframe.contentWindow.document;
+				iframeDoc.open();
+				iframeDoc.write(previewHtml);
+				iframeDoc.close();
+
+				// Show iframe, hide loading
+				previewLoading.style.display = 'none';
+				previewIframe.style.display = 'block';
+			} catch (error) {
+				previewLoading.textContent = `Error loading preview: ${error.message}`;
+				console.error('Preview error:', error);
+			}
+		}
+
+		previewButton.addEventListener('click', renderPreview);
+
 		uploadButton.addEventListener('click', async () => {
 			if (!selectedFile) return;
 
@@ -847,7 +1133,7 @@
 					headers['X-Turnstile-Token'] = turnstileToken;
 				}
 				
-				const response = await fetch(`/upload?expiration=${expirationDays}`, {
+				const response = await fetch(`/upload?expiration=${expirationDays}&theme=${selectedTheme}`, {
 					method: 'POST',
 					headers: headers,
 					body: text,
