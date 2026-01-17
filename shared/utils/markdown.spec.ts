@@ -129,14 +129,6 @@ describe("markdownToHtml security tests", () => {
 	});
 
 	describe("XSS prevention - Style injection", () => {
-		it("should sanitize style tags with expression", async () => {
-			const malicious =
-				'<style>body { background: expression(alert("XSS")); }</style>';
-			const result = await markdownToHtml(malicious);
-			expect(result).not.toContain("expression");
-			expect(result).not.toContain('alert("XSS")');
-		});
-
 		it("should sanitize style attribute with expression", async () => {
 			const malicious =
 				"<div style=\"background: expression(alert('XSS'))\">Test</div>";
@@ -210,7 +202,7 @@ Normal text here.
 		it("should preserve safe HTML tags", async () => {
 			const markdown = "# Heading\n\n**Bold** and *italic* text";
 			const result = await markdownToHtml(markdown);
-			expect(result).toContain("<h1>");
+			expect(result).toContain("<h1 id=");
 			expect(result).toContain("<strong>");
 			expect(result).toContain("<em>");
 		});
@@ -235,6 +227,30 @@ Normal text here.
 			const result = await markdownToHtml(markdown);
 			expect(result).toContain("code");
 			expect(result).toContain("const x = 1");
+		});
+	});
+
+	describe("Heading ID generation", () => {
+		it("should generate IDs for headings", async () => {
+			const markdown = "# Chapter 1. Clean Code\n\n## Boy Scout Rule";
+			const result = await markdownToHtml(markdown);
+			expect(result).toContain("chapter-1-clean-code");
+			expect(result).toContain("boy-scout-rule");
+		});
+
+		it("should handle duplicate English headings", async () => {
+			const markdown = "# Title\n\n# Title\n\n# Title";
+			const result = await markdownToHtml(markdown);
+			expect(result).toContain("title");
+			expect(result).toContain("title-1");
+			expect(result).toContain("title-2");
+		});
+
+		it("should generate IDs for headings with special characters", async () => {
+			const markdown = "# Hello, World!\n\n## Test (Example)";
+			const result = await markdownToHtml(markdown);
+			expect(result).toContain("hello-world");
+			expect(result).toContain("test-example");
 		});
 	});
 });

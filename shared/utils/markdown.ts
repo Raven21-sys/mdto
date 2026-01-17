@@ -1,5 +1,10 @@
-import insane from "insane";
-import { marked } from "marked";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
+import rehypeSlug from "rehype-slug";
+import rehypeStringify from "rehype-stringify";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import { unified } from "unified";
 
 /**
  * Convert Markdown text to HTML
@@ -7,52 +12,15 @@ import { marked } from "marked";
  * @returns HTML string
  */
 export async function markdownToHtml(markdown: string): Promise<string> {
-	const dirtyHtml = await marked.parse(markdown);
-	const cleanHtml = insane(dirtyHtml, {
-		allowedTags: [
-			// Headings
-			"h1",
-			"h2",
-			"h3",
-			"h4",
-			"h5",
-			"h6",
-			// Text formatting
-			"p",
-			"strong",
-			"em",
-			"u",
-			"del",
-			"ins",
-			// Links and images
-			"a",
-			"img",
-			// Code
-			"code",
-			"pre",
-			// Lists
-			"ul",
-			"ol",
-			"li",
-			// Blockquotes
-			"blockquote",
-			// Tables
-			"table",
-			"thead",
-			"tbody",
-			"tr",
-			"th",
-			"td",
-			// Other
-			"hr",
-			"br",
-			"div",
-			"span",
-		],
-		allowedAttributes: {
-			a: ["href", "title", "target", "rel"],
-			img: ["src", "alt", "title", "width", "height"],
-		},
-	});
-	return cleanHtml;
+	const processor = unified()
+		.use(remarkParse)
+		.use(remarkRehype, { allowDangerousHtml: true })
+		.use(rehypeRaw)
+		.use(rehypeSanitize)
+		.use(rehypeSlug)
+		.use(rehypeStringify);
+
+	const file = await processor.process(markdown);
+
+	return String(file);
 }
