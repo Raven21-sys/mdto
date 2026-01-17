@@ -43,10 +43,5 @@
 		}
 	},
 	"exclude": ["test"],
-	"include": [
-		"../worker-configuration.d.ts",
-		"../html.d.ts",
-		"../shared/**/*.ts",
-		"**/*.ts"
-	]
+	"include": ["../worker-configuration.d.ts", "../shared/**/*.ts", "**/*.ts"]
 }

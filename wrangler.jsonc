@@ -17,12 +17,6 @@
 			"binding": "BUCKET"
 		}
 	],
-	"rules": [
-		{
-			"type": "Text",
-			"globs": ["**/*.html"]
-		}
-	],
 	"assets": {
 		"directory": "./public",
 		"binding": "ASSETS"
