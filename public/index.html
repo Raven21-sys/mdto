@@ -816,7 +816,7 @@
 		Press <span class="kbd">⌘ O</span> to browse files
 	</div>
 
-	<input type="file" id="fileInput" class="file-input" accept=".md">
+	<input type="file" id="fileInput" class="file-input" accept=".md,.markdown,.txt">
 
 	<script>
 		const uploadView = document.getElementById('uploadView');
@@ -958,11 +958,11 @@
 		function isValidMarkdownFile(file) {
 			if (!file || !file.name) return false;
 			const fileName = file.name.toLowerCase();
-			return fileName.endsWith('.md');
+			return fileName.endsWith('.md') || fileName.endsWith('.markdown') || fileName.endsWith('.txt');
 		}
 
 		function showFileError() {
-			alert('Please select a .md file only');
+			alert('Please select a .md, .markdown, or .txt file only');
 		}
 
 		function handleFileSelect(file) {
@@ -996,7 +996,7 @@
 			
 			// Reset text
 			uploadArea.querySelector('.upload-title').textContent = 'Import Markdown';
-			uploadArea.querySelector('.upload-desc').innerHTML = 'Drop your .md file here or click to browse<br><span style="opacity: 0.5; font-size: 11px; margin-top: 6px; display: inline-block;">Maximum 100KB</span>';
+			uploadArea.querySelector('.upload-desc').innerHTML = 'Drop your .md, .markdown, or .txt file here or click to browse<br><span style="opacity: 0.5; font-size: 11px; margin-top: 6px; display: inline-block;">Maximum 100KB</span>';
 			
 			// Reset expiration to default (30 days)
 			expirationDays = 30;
