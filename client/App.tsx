@@ -75,6 +75,7 @@ export function App() {
 			if (response.ok && data.slug) {
 				const viewUrl = `${window.location.origin}/${data.slug}`;
 				setUploadedUrl(viewUrl);
+				setShowPreview(false);
 			} else {
 				turnstile.reset();
 				setTurnstileToken(null);
