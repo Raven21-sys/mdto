@@ -164,6 +164,7 @@ dist
 !.dev.vars.example
 .env*
 !.env.example
+!.env.local
 .wrangler/
 worker-configuration.d.ts
 

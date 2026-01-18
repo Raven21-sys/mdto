@@ -5,7 +5,7 @@ import "./styles.css";
 import { PostHogProvider } from "@posthog/react";
 import posthog from "posthog-js";
 
-if (typeof window !== "undefined" && !import.meta.env.DEV) {
+if (import.meta.env.PROD) {
 	posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
 		api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
 		defaults: "2025-11-30",

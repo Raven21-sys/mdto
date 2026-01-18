@@ -183,22 +183,24 @@ export function App() {
 				</div>
 			</div>
 
-			<Turnstile
-				className="self-center hidden"
-				sitekey="0x4AAAAAACMzQnf-J0EKwNYD"
-				appearance="interaction-only"
-				theme="dark"
-				fixedSize
-				onVerify={(token) => {
-					setTurnstileToken(token);
-				}}
-				onExpire={() => {
-					setTurnstileToken(null);
-				}}
-				onError={() => {
-					setTurnstileToken(null);
-				}}
-			/>
+			{import.meta.env.PROD && (
+				<Turnstile
+					className="self-center hidden"
+					sitekey={import.meta.env.VITE_PUBLIC_TURNSTILE_SITE_KEY}
+					appearance="interaction-only"
+					theme="dark"
+					fixedSize
+					onVerify={(token) => {
+						setTurnstileToken(token);
+					}}
+					onExpire={() => {
+						setTurnstileToken(null);
+					}}
+					onError={() => {
+						setTurnstileToken(null);
+					}}
+				/>
+			)}
 
 			<input
 				type="file"
