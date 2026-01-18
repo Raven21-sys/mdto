@@ -29,6 +29,31 @@ body {
 	flex: 1;
 }
 
+/* Frontmatter */
+.frontmatter-container {
+	margin-bottom: 2rem;
+	padding-bottom: 1rem;
+}
+
+.frontmatter-row {
+	display: flex;
+	align-items: baseline;
+	margin-bottom: 0.25rem;
+	font-size: 0.9em;
+}
+
+.frontmatter-label {
+	width: 120px;
+	color: var(--text-secondary);
+	font-weight: 500;
+	flex-shrink: 0;
+}
+
+.frontmatter-value {
+	color: var(--text-primary);
+	flex: 1;
+}
+
 /* Typography */
 h1,
 h2,

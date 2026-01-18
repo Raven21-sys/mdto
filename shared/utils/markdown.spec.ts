@@ -246,4 +246,33 @@ Normal text here.
 			expect(result).toContain("test-example");
 		});
 	});
+
+	describe("Frontmatter handling logic", () => {
+		it("should parse frontmatter and render as structured HTML", async () => {
+			const markdown = "---\ntitle: Hello World\nauthor: John Doe\n---";
+			const result = await markdownToHtml(markdown);
+			expect(result).toContain('<div class="frontmatter-container">');
+			expect(result).toContain('<div class="frontmatter-label">title</div>');
+			expect(result).toContain(
+				'<div class="frontmatter-value">Hello World</div>',
+			);
+			expect(result).toContain('<div class="frontmatter-label">author</div>');
+			expect(result).toContain('<div class="frontmatter-value">John Doe</div>');
+		});
+
+		it("should handle date objects correctly", async () => {
+			// Using a date string that js-yaml will parse as a Date object
+			const markdown = "---\ndate: 2024-01-01\n---";
+			const result = await markdownToHtml(markdown);
+			expect(result).toContain('<div class="frontmatter-label">date</div>');
+			// The exact format might depend on locale, but let's check for the year at least
+			expect(result).toContain("2024");
+		});
+
+		it("should ignore invalid yaml", async () => {
+			const markdown = "---\n: invalid yaml\n---";
+			const result = await markdownToHtml(markdown);
+			expect(result).not.toContain('<div class="frontmatter-container">');
+		});
+	});
 });

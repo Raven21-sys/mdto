@@ -65,6 +65,30 @@ body {
 	flex: 1;
 }
 
+/* Frontmatter */
+.frontmatter-container {
+	margin-bottom: 2rem;
+	padding-bottom: 1.5rem;
+}
+
+.frontmatter-row {
+	display: flex;
+	align-items: baseline;
+	margin-bottom: 0.5rem;
+	font-size: 0.95em;
+}
+
+.frontmatter-label {
+	width: 140px;
+	color: var(--text-tertiary);
+	flex-shrink: 0;
+}
+
+.frontmatter-value {
+	color: var(--text-primary);
+	flex: 1;
+}
+
 /* Typography */
 h1,
 h2,
