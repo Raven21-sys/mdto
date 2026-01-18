@@ -109,8 +109,22 @@ ol {
 	color: #333333;
 }
 
+/* Checkboxes for task lists */
+li:has(input[type="checkbox"]),
+li.task-list-item {
+	list-style-type: none;
+}
+
+ul:has(li input[type="checkbox"]) {
+	padding-left: 0;
+}
+
 li {
 	margin-bottom: 0.4em;
+}
+
+input[type="checkbox"] {
+	margin-left: 0;
 }
 
 /* Links */

@@ -200,9 +200,17 @@ hr {
 }
 
 /* Checkboxes for task lists */
+li:has(input[type="checkbox"]),
+li.task-list-item {
+	list-style-type: none;
+}
+
+ul:has(li input[type="checkbox"]) {
+	padding-left: 0;
+}
+
 input[type="checkbox"] {
-	margin-right: 0.5em;
-	accent-color: var(--primary-color);
+	margin-left: 0;
 }
 
 /* Footer */
