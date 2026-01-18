@@ -1,6 +1,7 @@
+import notFoundPage from "@shared/templates/not-found.html";
 import { handleUpload } from "./routes/upload.route";
 import { handleView } from "./routes/view.route";
-import { text } from "./utils/response";
+import { html } from "./utils/response";
 
 export default {
 	async fetch(request, env): Promise<Response> {
@@ -14,7 +15,6 @@ export default {
 		}
 
 		// GET /:prefix/:slug - View markdown as HTML
-		// GET / - Show upload page
 		if (method === "GET") {
 			// Parse /{prefix}/{slug} pattern
 			const parts = pathname.slice(1).split("/");
@@ -24,9 +24,9 @@ export default {
 				return handleView(prefix, slug, env);
 			}
 
-			return text("Not found", 404);
+			return html(notFoundPage, 404);
 		}
 
-		return text("Not found", 404);
+		return html(notFoundPage, 404);
 	},
 } satisfies ExportedHandler<Env>;

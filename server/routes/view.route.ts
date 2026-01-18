@@ -1,3 +1,4 @@
+import notFoundPage from "@shared/templates/not-found.html";
 import { createHtmlPage } from "@shared/templates/view.template";
 import { html, text } from "../utils/response";
 import { isValidSlug } from "../utils/slug";
@@ -22,7 +23,7 @@ export async function handleView(
 		const object = await env.BUCKET.get(key);
 
 		if (!object) {
-			return text("Not found", 404, "no-cache");
+			return html(notFoundPage, 404);
 		}
 
 		const htmlContent = await object.text();
