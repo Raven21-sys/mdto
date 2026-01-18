@@ -1,5 +1,6 @@
 import notFoundPage from "@shared/templates/not-found.html";
 import { createHtmlPage } from "@shared/templates/view.template";
+import { calculateCacheControlHeader } from "../utils/cache";
 import { html, text } from "../utils/response";
 import { isValidSlug } from "../utils/slug";
 
@@ -37,8 +38,10 @@ export async function handleView(
 
 		const htmlPage = createHtmlPage(slug, htmlContent, theme, expiresAt);
 
-		// Cache successful responses for 30 days (2592000 seconds)
-		return html(htmlPage, 200, "public, max-age=2592000");
+		// Calculate remaining cache time
+		const cacheHeader = calculateCacheControlHeader(Date.now(), expirationTime);
+
+		return html(htmlPage, 200, cacheHeader);
 	} catch (error) {
 		console.error("View error:", error);
 		return text("Internal server error", 500, "no-cache");
