@@ -7,6 +7,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { RefObject } from "react";
 import { useCallback, useMemo, useState } from "react";
+import { cn } from "../utils/styles";
 
 interface UploadViewProps {
 	selectedFile: File | null;
@@ -86,29 +87,21 @@ export function UploadView({
 	);
 
 	const getUploadZoneClasses = () => {
-		let classes =
-			"bg-surface border border-dashed border-border rounded-lg py-[60px] px-6 text-center cursor-pointer transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] relative";
-
-		if (isDragover) {
-			classes += " !border-primary !bg-[rgba(94,106,210,0.08)] !border-solid";
-		} else if (selectedFile) {
-			classes +=
-				" !border-solid !border-[rgba(94,106,210,0.5)] bg-[radial-gradient(circle_at_50%_0%,rgba(94,106,210,0.1),transparent_70%)]";
-		}
-
-		return classes;
+		return cn(
+			"bg-surface border border-dashed border-border rounded-lg py-[60px] px-6 text-center cursor-pointer transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] relative",
+			isDragover && "border-primary! bg-[rgba(94,106,210,0.08)]! border-solid!",
+			selectedFile &&
+				!isDragover &&
+				"border-solid! border-[rgba(94,106,210,0.5)]! bg-[radial-gradient(circle_at_50%_0%,rgba(94,106,210,0.1),transparent_70%)]",
+		);
 	};
 
 	const getIconWrapperClasses = () => {
-		let classes =
-			"w-10 h-10 bg-surface-elevated border border-border rounded-[10px] mx-auto mb-4 flex items-center justify-center shadow-icon transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-text-secondary";
-
-		if (selectedFile) {
-			classes +=
-				" !bg-primary !border-primary !text-white scale-105 shadow-icon-selected";
-		}
-
-		return classes;
+		return cn(
+			"w-10 h-10 bg-surface-elevated border border-border rounded-[10px] mx-auto mb-4 flex items-center justify-center shadow-icon transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] text-text-secondary",
+			selectedFile &&
+				"bg-primary! border-primary! text-white! scale-105 shadow-icon-selected",
+		);
 	};
 
 	return (
@@ -125,7 +118,11 @@ export function UploadView({
 				onDrop={handleDrop}
 			>
 				<div
-					className={`${getIconWrapperClasses()} ${!selectedFile ? "group-hover:scale-110 group-hover:border-[#333] group-hover:text-text-primary" : ""}`}
+					className={cn(
+						getIconWrapperClasses(),
+						!selectedFile &&
+							"group-hover:scale-110 group-hover:border-[#333] group-hover:text-text-primary",
+					)}
 				>
 					{selectedFile ? (
 						<HugeiconsIcon icon={File} className="w-5 h-5" />
@@ -170,7 +167,7 @@ export function UploadView({
 								icon={InformationCircleIcon}
 								className="w-3 h-3 text-text-tertiary transition-colors duration-200"
 							/>
-							<div className="invisible absolute bottom-full left-1/2 -translate-x-1/2 translate-y-1 bg-surface-elevated border border-border-highlight text-text-primary py-2 px-3 rounded-md text-[11px] leading-snug w-max max-w-[200px] text-center shadow-tooltip opacity-0 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-none z-[100] group-hover:visible group-hover:opacity-100 group-hover:-translate-y-2 after:content-[''] after:absolute after:top-full after:left-1/2 after:-ml-1 after:border-4 after:border-solid after:border-t-border-highlight after:border-x-transparent after:border-b-transparent">
+							<div className="invisible absolute bottom-full left-1/2 -translate-x-1/2 translate-y-1 bg-surface-elevated border border-border-highlight text-text-primary py-2 px-3 rounded-md text-[11px] leading-snug w-max max-w-[200px] text-center shadow-tooltip opacity-0 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-none z-100 group-hover:visible group-hover:opacity-100 group-hover:-translate-y-2 after:content-[''] after:absolute after:top-full after:left-1/2 after:-ml-1 after:border-4 after:border-solid after:border-t-border-highlight after:border-x-transparent after:border-b-transparent">
 								Deletion occurs periodically,
 								<br />
 								so the exact time may vary.
@@ -188,11 +185,11 @@ export function UploadView({
 						<button
 							key={option.value}
 							type="button"
-							className={`bg-transparent border border-transparent text-text-tertiary text-xs font-medium py-1 px-2.5 rounded cursor-pointer transition-all duration-200 font-sans flex-1 hover:text-text-secondary ${
-								expirationDays === option.value
-									? "!bg-surface-highlight !text-text-primary shadow-option-active !border-white/5"
-									: ""
-							}`}
+							className={cn(
+								"bg-transparent border border-transparent text-text-tertiary text-xs font-medium py-1 px-2.5 rounded cursor-pointer transition-all duration-200 font-sans flex-1 hover:text-text-secondary",
+								expirationDays === option.value &&
+									"bg-surface-highlight! text-text-primary! shadow-option-active border-white/5!",
+							)}
 							onClick={() => onExpirationChange(option.value)}
 						>
 							{option.label}
@@ -215,11 +212,11 @@ export function UploadView({
 						<button
 							key={option.value}
 							type="button"
-							className={`bg-transparent border border-transparent text-text-tertiary text-xs font-medium py-1 px-2.5 rounded cursor-pointer transition-all duration-200 font-sans flex-1 hover:text-text-secondary ${
-								selectedTheme === option.value
-									? "!bg-surface-highlight !text-text-primary shadow-option-active !border-white/5"
-									: ""
-							}`}
+							className={cn(
+								"bg-transparent border border-transparent text-text-tertiary text-xs font-medium py-1 px-2.5 rounded cursor-pointer transition-all duration-200 font-sans flex-1 hover:text-text-secondary",
+								selectedTheme === option.value &&
+									"bg-surface-highlight! text-text-primary! shadow-option-active border-white/5!",
+							)}
 							onClick={() => onThemeChange(option.value)}
 						>
 							{option.label}
@@ -241,7 +238,13 @@ export function UploadView({
 
 				<button
 					type="button"
-					className={`w-full bg-linear-to-b from-primary to-[#4e5ac0] border border-white/8 border-t-white/15 text-white py-2.5 h-10 rounded-lg text-[13px] font-medium cursor-pointer transition-all duration-200 shadow-btn flex items-center justify-center gap-2 hover:enabled:-translate-y-px hover:enabled:shadow-btn-hover active:enabled:translate-y-0 active:enabled:opacity-90 disabled:!bg-surface disabled:!bg-none disabled:border-border disabled:text-text-tertiary disabled:cursor-not-allowed disabled:opacity-100 disabled:shadow-none ${isUploading ? "!bg-surface !bg-none border-border text-text-tertiary cursor-not-allowed opacity-100 shadow-none" : ""}`}
+					className={cn(
+						"w-full bg-linear-to-b from-primary to-[#4e5ac0] border border-white/8 border-t-white/15 text-white py-2.5 h-10 rounded-lg text-[13px] font-medium cursor-pointer transition-all duration-200 shadow-btn flex items-center justify-center gap-2",
+						"hover:enabled:-translate-y-px hover:enabled:shadow-btn-hover active:enabled:translate-y-0 active:enabled:opacity-90",
+						"disabled:bg-surface! disabled:bg-none! disabled:border-border disabled:text-text-tertiary disabled:cursor-not-allowed disabled:opacity-100 disabled:shadow-none",
+						isUploading &&
+							"bg-surface! bg-none! border-border text-text-tertiary cursor-not-allowed opacity-100 shadow-none",
+					)}
 					disabled={!selectedFile || isUploading}
 					onClick={onUpload}
 				>

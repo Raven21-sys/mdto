@@ -4,6 +4,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useCallback, useState } from "react";
+import { cn } from "../utils/styles";
 
 interface SuccessViewProps {
 	url: string;
@@ -37,20 +38,20 @@ export function SuccessView({ url, onReset }: SuccessViewProps) {
 			<div className="flex w-full gap-2 mb-6">
 				<input
 					type="text"
-					className="flex-1 bg-background border border-border rounded-md px-3 font-sans text-[13px] text-text-secondary outline-none h-9 transition-colors duration-200 focus:border-text-tertiary focus:text-text-primary"
+					className="min-w-0 flex-1 bg-background border border-border rounded-md px-3 font-sans text-[13px] text-text-secondary outline-none h-9 transition-colors duration-200 focus:border-text-tertiary focus:text-text-primary"
 					readOnly
 					value={url}
 					onClick={(e) => e.currentTarget.select()}
 				/>
 				<button
 					type="button"
-					className={`
-						h-9 px-3 bg-surface-highlight border border-border rounded-md text-text-primary text-[13px] font-medium
-						cursor-pointer transition-all duration-200 whitespace-nowrap
-						hover:bg-[#25262a] hover:border-text-tertiary
-						active:scale-[0.98]
-						${copied ? "text-success border-success/30" : ""}
-					`}
+					className={cn(
+						"h-9 px-3 bg-surface-highlight border border-border rounded-md text-text-primary text-[13px] font-medium",
+						"cursor-pointer transition-all duration-200 whitespace-nowrap",
+						"hover:bg-[#25262a] hover:border-text-tertiary",
+						"active:scale-[0.98]",
+						copied && "text-success border-success/30",
+					)}
 					onClick={handleCopy}
 				>
 					{copied ? "Copied!" : "Copy"}

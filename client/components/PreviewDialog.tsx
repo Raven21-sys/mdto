@@ -3,6 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { createHtmlPage } from "@shared/templates/view.template";
 import { markdownToHtml } from "@shared/utils/markdown";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "../utils/styles";
 
 interface PreviewDialogProps {
 	file: File;
@@ -83,7 +84,10 @@ export function PreviewDialog({ file, theme, onClose }: PreviewDialogProps) {
 						Preview - {themeName}
 					</div>
 					<button
-						className="w-8 h-8 flex items-center justify-center bg-transparent border border-border rounded-md text-text-secondary cursor-pointer transition-all duration-200 hover:bg-surface-highlight hover:border-text-tertiary hover:text-text-primary"
+						className={cn(
+							"w-8 h-8 flex items-center justify-center bg-transparent border border-border rounded-md text-text-secondary cursor-pointer transition-all duration-200",
+							"hover:bg-surface-highlight hover:border-text-tertiary hover:text-text-primary",
+						)}
 						onClick={onClose}
 						type="button"
 						aria-label="Close preview"

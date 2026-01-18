@@ -6,6 +6,7 @@ import { PreviewDialog } from "./components/PreviewDialog";
 import { PreviewPane } from "./components/PreviewPane";
 import { SuccessView } from "./components/SuccessView";
 import { UploadView } from "./components/UploadView";
+import { cn } from "./utils/styles";
 
 export function App() {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -106,11 +107,12 @@ export function App() {
 		<>
 			{/* Main Container - Conditional Styles for Split View */}
 			<div
-				className={`relative z-1 w-full flex flex-col items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+				className={cn(
+					"relative z-1 w-full flex flex-col items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
 					showPreview && selectedFile
 						? "md:w-full md:max-w-none md:h-screen md:grid md:grid-cols-2 md:items-start md:justify-start"
-						: "max-w-[440px] px-5 min-h-screen"
-				}`}
+						: "max-w-[440px] px-5 min-h-screen",
+				)}
 			>
 				{/* Left Pane (Preview) - Desktop Only */}
 				{showPreview && selectedFile && (
@@ -125,11 +127,10 @@ export function App() {
 
 				{/* Right Pane (Upload/Settings) */}
 				<div
-					className={`w-full flex flex-col items-center justify-center ${
-						showPreview && selectedFile
-							? "md:h-full md:p-10 md:bg-background"
-							: ""
-					}`}
+					className={cn(
+						"w-full flex flex-col items-center justify-center",
+						showPreview && selectedFile && "md:h-full md:p-10 md:bg-background",
+					)}
 				>
 					{/* Logo */}
 					<div className="flex items-center justify-center mb-10 opacity-100">

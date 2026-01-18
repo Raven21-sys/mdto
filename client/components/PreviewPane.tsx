@@ -3,6 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { createHtmlPage } from "@shared/templates/view.template";
 import { markdownToHtml } from "@shared/utils/markdown";
 import { useEffect, useRef, useState } from "react";
+import { cn } from "../utils/styles";
 
 interface PreviewPaneProps {
 	file: File;
@@ -58,7 +59,10 @@ export function PreviewPane({ file, theme, onClose }: PreviewPaneProps) {
 					Preview - {themeName}
 				</div>
 				<button
-					className="w-7 h-7 flex items-center justify-center bg-transparent border border-border rounded-md text-text-secondary cursor-pointer transition-all duration-200 hover:bg-surface-highlight hover:border-text-tertiary hover:text-text-primary"
+					className={cn(
+						"w-7 h-7 flex items-center justify-center bg-transparent border border-border rounded-md text-text-secondary cursor-pointer transition-all duration-200",
+						"hover:bg-surface-highlight hover:border-text-tertiary hover:text-text-primary",
+					)}
 					onClick={onClose}
 					type="button"
 					aria-label="Close preview"
