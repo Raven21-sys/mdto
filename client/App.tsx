@@ -154,7 +154,8 @@ export function App() {
 								onFileSelect={handleFileSelect}
 								onExpirationChange={setExpirationDays}
 								onThemeChange={setSelectedTheme}
-								onPreview={() => setShowPreview(true)}
+								onPreview={() => setShowPreview((prev) => !prev)}
+								isPreviewOpen={showPreview}
 								onUpload={handleUpload}
 							/>
 						)}
