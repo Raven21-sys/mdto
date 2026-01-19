@@ -109,9 +109,10 @@ export function App() {
 			<div
 				className={cn(
 					"relative z-1 w-full flex flex-col items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-					showPreview && selectedFile
-						? "md:w-full md:max-w-none md:h-screen md:grid md:grid-cols-2 md:items-start md:justify-start"
-						: "max-w-[440px] px-5 min-h-screen",
+					"min-h-screen w-full max-w-[480px] px-5",
+					showPreview &&
+						selectedFile &&
+						"md:max-w-none md:px-0 md:h-screen md:grid md:grid-cols-2 md:items-start md:justify-start",
 				)}
 			>
 				{/* Left Pane (Preview) - Desktop Only */}
@@ -130,7 +131,7 @@ export function App() {
 				<div
 					className={cn(
 						"w-full flex flex-col items-center justify-center",
-						showPreview && selectedFile && "md:h-full md:p-10 md:bg-background",
+						showPreview && selectedFile && "md:h-full md:p-6 md:bg-background",
 					)}
 				>
 					{/* Logo */}
