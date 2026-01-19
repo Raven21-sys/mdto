@@ -1,11 +1,13 @@
 import yaml from "js-yaml";
 import rehypeHighlight from "rehype-highlight";
+import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import rehypeSlug from "rehype-slug";
 import rehypeStringify from "rehype-stringify";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
@@ -100,6 +102,7 @@ export async function markdownToHtml(markdown: string): Promise<string> {
 		.use(remarkParse)
 		.use(remarkFrontmatter)
 		.use(remarkGfm)
+		.use(remarkMath)
 		// @ts-expect-error - Handler signature is correct but TypeScript can't infer it
 		.use(remarkRehype, {
 			allowDangerousHtml: true,
@@ -108,6 +111,7 @@ export async function markdownToHtml(markdown: string): Promise<string> {
 		.use(rehypeRaw)
 		.use(rehypeSanitize, sanitizeSchema)
 		.use(rehypeHighlight)
+		.use(rehypeKatex)
 		.use(rehypeSlug)
 		.use(rehypeStringify);
 

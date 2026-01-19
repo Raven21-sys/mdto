@@ -245,6 +245,7 @@ export function createHtmlPage(options: CreateHtmlPageOptions): string {
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="${themePath}">
 	<link rel="stylesheet" href="${hljsThemePath}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew" crossorigin="anonymous">
 </head>
 <body>
 	<div class="top-actions">
