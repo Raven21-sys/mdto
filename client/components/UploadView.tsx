@@ -90,11 +90,11 @@ export function UploadView({
 
 	const getUploadZoneClasses = () => {
 		return cn(
-			"bg-surface border border-dashed border-border rounded-lg py-[60px] px-6 text-center cursor-pointer transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] relative",
+			"bg-surface border border-dashed border-border rounded-lg h-[200px] px-6 text-center cursor-pointer transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] relative flex flex-col items-center justify-center",
 			isDragover && "border-primary! bg-[rgba(94,106,210,0.08)]! border-solid!",
 			selectedFile &&
 				!isDragover &&
-				"border-solid! border-[rgba(94,106,210,0.5)]! bg-[radial-gradient(circle_at_50%_0%,rgba(94,106,210,0.1),transparent_70%)]",
+				"border-solid! border-[rgba(94,106,210,0.5)]! bg-[radial-gradient(circle_at_50%_0%,rgba(94,106,210,0.1),transparent_70%)] bg-no-repeat animate-slide-down-gradient",
 		);
 	};
 
