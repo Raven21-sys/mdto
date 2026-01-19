@@ -261,46 +261,25 @@ footer a:hover {
 	align-items: center;
 	gap: 8px;
 	padding: 8px;
-	background-color: var(--bg-root);
-	border: 1px solid var(--border-subtle);
+	background-color: transparent;
+	border: none;
 	border-radius: 6px;
 	cursor: pointer;
 	font-size: 14px;
 	font-weight: 500;
 	color: var(--text-primary);
+	opacity: 0.7;
 	transition: all 0.2s ease;
-	box-shadow: var(--shadow-card);
 }
 
 .top-actions button:hover {
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	background-color: var(--bg-card);
+	opacity: 1;
 }
 
 .top-actions button svg {
 	width: 16px;
 	height: 16px;
-}
-
-.theme-toggle {
-	opacity: 0.8;
-}
-
-.theme-toggle:hover {
-	opacity: 1;
-}
-
-@media (max-width: 768px) {
-	.top-actions {
-		gap: 8px;
-	}
-	.top-actions button {
-		padding: 6px;
-		font-size: 12px;
-	}
-	.top-actions button svg {
-		width: 14px;
-		height: 14px;
-	}
 }
 
 @media print {
