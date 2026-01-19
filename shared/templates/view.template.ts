@@ -69,43 +69,15 @@ function initCopyButton(): void {
 			const markdown = copyBtn.dataset.markdown || "";
 			let copyTimeout: ReturnType<typeof setTimeout> | null = null;
 
-			// Fallback copy function using document.execCommand
-			function fallbackCopyText(text: string): boolean {
-				const textarea = document.createElement("textarea");
-				textarea.value = text;
-				textarea.style.position = "fixed";
-				textarea.style.left = "-999999px";
-				textarea.style.top = "-999999px";
-				document.body.appendChild(textarea);
-				textarea.focus();
-				textarea.select();
-
-				try {
-					const successful = document.execCommand("copy");
-					document.body.removeChild(textarea);
-					return successful;
-				} catch {
-					document.body.removeChild(textarea);
-					return false;
-				}
-			}
-
 			copyBtn.addEventListener("click", async () => {
 				try {
 					let copied = false;
 
-					// Try modern clipboard API first
 					if (navigator.clipboard?.writeText) {
 						try {
 							await navigator.clipboard.writeText(markdown);
 							copied = true;
-						} catch {
-							// Fallback to execCommand if clipboard API fails
-							copied = fallbackCopyText(markdown);
-						}
-					} else {
-						// Use fallback if clipboard API is not available
-						copied = fallbackCopyText(markdown);
+						} catch {}
 					}
 
 					if (copied) {
