@@ -68,6 +68,7 @@ export function usePreview({ file, theme, expirationDays }: UsePreviewProps) {
 			}
 		};
 
+		setLoading(true);
 		renderPreview();
 
 		return () => {
