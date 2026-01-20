@@ -42,7 +42,6 @@ export function PreviewDialog({
 	);
 
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: Todo
 		<div
 			className="fixed inset-0 bg-black/80 z-1000 flex items-center justify-center p-2.5 backdrop-blur-sm animate-fade-in"
 			onClick={handleOverlayClick}
