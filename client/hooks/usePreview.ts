@@ -24,7 +24,17 @@ export function usePreview({ file, theme, expirationDays }: UsePreviewProps) {
 
 		const handleLoad = () => {
 			if (!isCancelled) {
-				setLoading(false);
+				// Use double requestAnimationFrame to ensure the browser has completed
+				// at least one full layout and paint cycle. This prevents flickering
+				// by making sure the content is actually rendered on screen before
+				// we hide the loading indicator.
+				requestAnimationFrame(() => {
+					requestAnimationFrame(() => {
+						if (!isCancelled) {
+							setLoading(false);
+						}
+					});
+				});
 			}
 		};
 
