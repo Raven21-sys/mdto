@@ -1,4 +1,6 @@
 import yaml from "js-yaml";
+import type { Root } from "mdast";
+import { toString as mdastToString } from "mdast-util-to-string";
 import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
@@ -11,6 +13,25 @@ import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
+import { visit } from "unist-util-visit";
+
+export interface MarkdownMetadata {
+	title?: string;
+	description?: string;
+}
+
+const MAX_TITLE_LENGTH = 60;
+const MAX_DESCRIPTION_LENGTH = 160;
+
+function truncate(text: string, maxLength: number): string {
+	if (text.length <= maxLength) return text;
+	return `${text.slice(0, maxLength - 3).trim()}...`;
+}
+
+export interface MarkdownResult {
+	html: string;
+	metadata: MarkdownMetadata;
+}
 
 const yamlHandler = (
 	state: {
@@ -93,15 +114,72 @@ const sanitizeSchema = {
 } as typeof defaultSchema;
 
 /**
- * Convert Markdown text to HTML
- * @param markdown - Markdown text to convert
- * @returns HTML string
+ * Remark plugin to extract metadata from AST
+ * Extracts: frontmatter title/description, first heading, first paragraph
  */
-export async function markdownToHtml(markdown: string): Promise<string> {
+function remarkExtractMetadata(metadata: MarkdownMetadata) {
+	return (tree: Root) => {
+		let foundHeading = false;
+		let foundParagraph = false;
+
+		visit(tree, (node) => {
+			// Extract from frontmatter (yaml)
+			if (node.type === "yaml") {
+				try {
+					const data = yaml.load(node.value as string) as Record<
+						string,
+						unknown
+					>;
+					if (data && typeof data === "object") {
+						if (typeof data.title === "string") {
+							metadata.title = data.title;
+						}
+						if (typeof data.description === "string") {
+							metadata.description = data.description;
+						}
+					}
+				} catch {
+					// Ignore parsing errors
+				}
+			}
+
+			// Fallback: first heading for title
+			if (!metadata.title && !foundHeading && node.type === "heading") {
+				metadata.title = truncate(mdastToString(node), MAX_TITLE_LENGTH);
+				foundHeading = true;
+			}
+
+			// Fallback: first paragraph for description
+			if (
+				!metadata.description &&
+				!foundParagraph &&
+				node.type === "paragraph"
+			) {
+				metadata.description = truncate(
+					mdastToString(node),
+					MAX_DESCRIPTION_LENGTH,
+				);
+				foundParagraph = true;
+			}
+		});
+	};
+}
+
+/**
+ * Convert Markdown text to HTML with metadata extraction
+ * @param markdown - Markdown text to convert
+ * @returns HTML string and extracted metadata
+ */
+export async function markdownToHtml(
+	markdown: string,
+): Promise<MarkdownResult> {
+	const metadata: MarkdownMetadata = {};
+
 	const processor = unified()
 		.use(remarkParse)
 		.use(remarkFrontmatter)
 		.use(remarkGfm)
+		.use(() => remarkExtractMetadata(metadata))
 		.use(remarkMath)
 		// @ts-expect-error - Handler signature is correct but TypeScript can't infer it
 		.use(remarkRehype, {
@@ -117,5 +195,8 @@ export async function markdownToHtml(markdown: string): Promise<string> {
 
 	const file = await processor.process(markdown);
 
-	return String(file);
+	return {
+		html: String(file),
+		metadata,
+	};
 }

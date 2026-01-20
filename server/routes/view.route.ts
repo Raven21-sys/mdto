@@ -33,6 +33,8 @@ export async function handleView(
 
 		const contentType = object.httpMetadata?.contentType || "text/html";
 		const theme = object.customMetadata?.theme || "default";
+		const metaTitle = object.customMetadata?.title || "";
+		const metaDescription = object.customMetadata?.description || "";
 
 		let markdown: string | undefined;
 		let html: string;
@@ -71,7 +73,8 @@ export async function handleView(
 		const expiresAt = expirationTime.toString();
 
 		const htmlPage = createHtmlPage({
-			title: slug,
+			title: metaTitle || slug,
+			description: metaDescription,
 			html,
 			expiresAt,
 			theme,

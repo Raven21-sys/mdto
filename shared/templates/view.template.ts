@@ -20,7 +20,7 @@ function getThemePaths(theme: string): {
  */
 export const TEMPLATE_VERSION = "2";
 
-const metaDescription =
+const defaultDescription =
 	"Convert and share your markdown files as beautiful HTML pages";
 
 /**
@@ -138,6 +138,7 @@ function initExportActions(): void {
 
 interface CreateHtmlPageOptions {
 	title: string;
+	description?: string;
 	html: string;
 	expiresAt: string;
 	markdown?: string;
@@ -147,12 +148,14 @@ interface CreateHtmlPageOptions {
 export function createHtmlPage(options: CreateHtmlPageOptions): string {
 	const {
 		title,
+		description,
 		html: htmlContent,
 		expiresAt,
 		markdown,
 		theme = "default",
 	} = options;
 	const { themePath, hljsThemePath } = getThemePaths(theme);
+	const metaDescription = description || defaultDescription;
 
 	const metaTags = [
 		`<meta name="description" content="${escapeHtml(metaDescription)}">`,

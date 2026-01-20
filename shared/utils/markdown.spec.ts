@@ -6,125 +6,125 @@ describe("markdownToHtml security tests", () => {
 		it("should sanitize script tags in markdown", async () => {
 			const malicious = "<script>alert('XSS')</script>";
 			const result = await markdownToHtml(malicious);
-			expect(result).not.toContain("<script>");
-			expect(result).not.toContain("alert('XSS')");
+			expect(result.html).not.toContain("<script>");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 
-		it("should sanitize script tags with src attribute", () => {
+		it("should sanitize script tags with src attribute", async () => {
 			const malicious = '<script src="evil.js"></script>';
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("<script");
-			expect(result).not.toContain("evil.js");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("<script");
+			expect(result.html).not.toContain("evil.js");
 		});
 
-		it("should sanitize script tags in markdown code blocks", () => {
+		it("should sanitize script tags in markdown code blocks", async () => {
 			const malicious = "```html\n<script>alert('XSS')</script>\n```";
-			const result = markdownToHtml(malicious);
+			const result = await markdownToHtml(malicious);
 			// Code blocks should be preserved but script tags should be sanitized
-			expect(result).not.toContain("<script>alert('XSS')</script>");
+			expect(result.html).not.toContain("<script>alert('XSS')</script>");
 		});
 	});
 
 	describe("XSS prevention - Event handlers", () => {
-		it("should sanitize onclick attribute", () => {
+		it("should sanitize onclick attribute", async () => {
 			const malicious = "<div onclick=\"alert('XSS')\">Click me</div>";
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("onclick");
-			expect(result).not.toContain("alert('XSS')");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("onclick");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 
-		it("should sanitize onerror attribute", () => {
+		it("should sanitize onerror attribute", async () => {
 			const malicious = '<img src="x" onerror="alert(\'XSS\')">';
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("onerror");
-			expect(result).not.toContain("alert('XSS')");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("onerror");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 
-		it("should sanitize onload attribute", () => {
+		it("should sanitize onload attribute", async () => {
 			const malicious = "<body onload=\"alert('XSS')\">";
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("onload");
-			expect(result).not.toContain("alert('XSS')");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("onload");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 
-		it("should sanitize onmouseover attribute", () => {
+		it("should sanitize onmouseover attribute", async () => {
 			const malicious = "<div onmouseover=\"alert('XSS')\">Hover</div>";
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("onmouseover");
-			expect(result).not.toContain("alert('XSS')");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("onmouseover");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 
-		it("should sanitize multiple event handlers", () => {
+		it("should sanitize multiple event handlers", async () => {
 			const malicious =
 				'<div onclick="alert(1)" onmouseover="alert(2)" onfocus="alert(3)">Test</div>';
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("onclick");
-			expect(result).not.toContain("onmouseover");
-			expect(result).not.toContain("onfocus");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("onclick");
+			expect(result.html).not.toContain("onmouseover");
+			expect(result.html).not.toContain("onfocus");
 		});
 	});
 
 	describe("XSS prevention - JavaScript URLs", () => {
-		it("should sanitize javascript: URLs in href", () => {
+		it("should sanitize javascript: URLs in href", async () => {
 			const malicious = "<a href=\"javascript:alert('XSS')\">Click</a>";
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("javascript:");
-			expect(result).not.toContain("alert('XSS')");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("javascript:");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 
-		it("should sanitize javascript: URLs in markdown links", () => {
+		it("should sanitize javascript: URLs in markdown links", async () => {
 			const malicious = '[Click](javascript:alert("XSS"))';
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("javascript:");
-			expect(result).not.toContain('alert("XSS")');
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("javascript:");
+			expect(result.html).not.toContain('alert("XSS")');
 		});
 
-		it("should sanitize javascript: URLs with encoded characters", () => {
+		it("should sanitize javascript: URLs with encoded characters", async () => {
 			const malicious = "<a href=\"javascript&#58;alert('XSS')\">Click</a>";
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("javascript");
-			expect(result).not.toContain("alert('XSS')");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("javascript");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 	});
 
 	describe("XSS prevention - Data URLs", () => {
-		it("should sanitize data URLs with JavaScript", () => {
+		it("should sanitize data URLs with JavaScript", async () => {
 			const malicious =
 				"<img src=\"data:text/html,<script>alert('XSS')</script>\">";
-			const result = markdownToHtml(malicious);
+			const result = await markdownToHtml(malicious);
 			// DOMPurify should sanitize dangerous data URLs
-			expect(result).not.toContain("<script>");
-			expect(result).not.toContain("alert('XSS')");
+			expect(result.html).not.toContain("<script>");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 
-		it("should sanitize data URLs with base64 encoded script", () => {
+		it("should sanitize data URLs with base64 encoded script", async () => {
 			const malicious =
 				'<img src="data:text/html;base64,PHNjcmlwdD5hbGVydCgnWFNTJyk8L3NjcmlwdD4=">';
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("<script>");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("<script>");
 		});
 	});
 
 	describe("XSS prevention - SVG and iframe", () => {
-		it("should sanitize SVG with script tags", () => {
+		it("should sanitize SVG with script tags", async () => {
 			const malicious = '<svg><script>alert("XSS")</script></svg>';
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("<script>");
-			expect(result).not.toContain('alert("XSS")');
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("<script>");
+			expect(result.html).not.toContain('alert("XSS")');
 		});
 
-		it("should sanitize iframe tags", () => {
+		it("should sanitize iframe tags", async () => {
 			const malicious = '<iframe src="evil.com"></iframe>';
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("<iframe");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("<iframe");
 		});
 
-		it("should sanitize object and embed tags", () => {
+		it("should sanitize object and embed tags", async () => {
 			const malicious =
 				'<object data="evil.swf"></object><embed src="evil.swf">';
-			const result = markdownToHtml(malicious);
-			expect(result).not.toContain("<object");
-			expect(result).not.toContain("<embed");
+			const result = await markdownToHtml(malicious);
+			expect(result.html).not.toContain("<object");
+			expect(result.html).not.toContain("<embed");
 		});
 	});
 
@@ -133,16 +133,16 @@ describe("markdownToHtml security tests", () => {
 			const malicious =
 				"<div style=\"background: expression(alert('XSS'))\">Test</div>";
 			const result = await markdownToHtml(malicious);
-			expect(result).not.toContain("expression");
-			expect(result).not.toContain("alert('XSS')");
+			expect(result.html).not.toContain("expression");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 
 		it("should sanitize style attribute with javascript URL", async () => {
 			const malicious =
 				"<div style=\"background: url(javascript:alert('XSS'))\">Test</div>";
 			const result = await markdownToHtml(malicious);
-			expect(result).not.toContain("javascript:");
-			expect(result).not.toContain("alert('XSS')");
+			expect(result.html).not.toContain("javascript:");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 	});
 
@@ -150,14 +150,14 @@ describe("markdownToHtml security tests", () => {
 		it("should sanitize form tags", async () => {
 			const malicious = '<form action="evil.com"><input name="data"></form>';
 			const result = await markdownToHtml(malicious);
-			expect(result).not.toContain("<form");
+			expect(result.html).not.toContain("<form");
 		});
 
 		it("should sanitize input tags with malicious attributes", async () => {
 			const malicious = "<input onfocus=\"alert('XSS')\" autofocus>";
 			const result = await markdownToHtml(malicious);
-			expect(result).not.toContain("onfocus");
-			expect(result).not.toContain("autofocus");
+			expect(result.html).not.toContain("onfocus");
+			expect(result.html).not.toContain("autofocus");
 		});
 	});
 
@@ -166,9 +166,9 @@ describe("markdownToHtml security tests", () => {
 			const malicious =
 				'<div><script>alert("XSS")</script><img src="x" onerror="alert(\'XSS\')"></div>';
 			const result = await markdownToHtml(malicious);
-			expect(result).not.toContain("<script>");
-			expect(result).not.toContain("onerror");
-			expect(result).not.toContain("alert");
+			expect(result.html).not.toContain("<script>");
+			expect(result.html).not.toContain("onerror");
+			expect(result.html).not.toContain("alert");
 		});
 
 		it("should sanitize markdown with mixed malicious content", async () => {
@@ -182,19 +182,19 @@ Normal text here.
 
 <img src="x" onerror="alert('XSS')">`;
 			const result = await markdownToHtml(malicious);
-			expect(result).not.toContain("<script>");
-			expect(result).not.toContain("javascript:");
-			expect(result).not.toContain("onerror");
-			expect(result).not.toContain("alert('XSS')");
+			expect(result.html).not.toContain("<script>");
+			expect(result.html).not.toContain("javascript:");
+			expect(result.html).not.toContain("onerror");
+			expect(result.html).not.toContain("alert('XSS')");
 		});
 
 		it("should sanitize HTML entities used for obfuscation", async () => {
 			const malicious =
 				'<img src="x" onerror="&#97;&#108;&#101;&#114;&#116;&#40;&#39;&#88;&#83;&#83;&#39;&#41;">';
 			const result = await markdownToHtml(malicious);
-			expect(result).not.toContain("onerror");
+			expect(result.html).not.toContain("onerror");
 			// Decoded alert should not be present
-			expect(result).not.toMatch(/alert\s*\(/i);
+			expect(result.html).not.toMatch(/alert\s*\(/i);
 		});
 	});
 
@@ -202,24 +202,24 @@ Normal text here.
 		it("should preserve safe HTML tags", async () => {
 			const markdown = "# Heading\n\n**Bold** and *italic* text";
 			const result = await markdownToHtml(markdown);
-			expect(result).toContain("<h1 id=");
-			expect(result).toContain("<strong>");
-			expect(result).toContain("<em>");
+			expect(result.html).toContain("<h1 id=");
+			expect(result.html).toContain("<strong>");
+			expect(result.html).toContain("<em>");
 		});
 
 		it("should preserve safe links", async () => {
 			const markdown = "[Google](https://google.com)";
 			const result = await markdownToHtml(markdown);
-			expect(result).toContain("<a");
-			expect(result).toContain("https://google.com");
-			expect(result).not.toContain("javascript:");
+			expect(result.html).toContain("<a");
+			expect(result.html).toContain("https://google.com");
+			expect(result.html).not.toContain("javascript:");
 		});
 
 		it("should preserve safe images", async () => {
 			const markdown = "![Alt](https://example.com/image.jpg)";
 			const result = await markdownToHtml(markdown);
-			expect(result).toContain("<img");
-			expect(result).toContain("https://example.com/image.jpg");
+			expect(result.html).toContain("<img");
+			expect(result.html).toContain("https://example.com/image.jpg");
 		});
 	});
 
@@ -227,23 +227,23 @@ Normal text here.
 		it("should generate IDs for headings", async () => {
 			const markdown = "# Chapter 1. Clean Code\n\n## Boy Scout Rule";
 			const result = await markdownToHtml(markdown);
-			expect(result).toContain("chapter-1-clean-code");
-			expect(result).toContain("boy-scout-rule");
+			expect(result.html).toContain("chapter-1-clean-code");
+			expect(result.html).toContain("boy-scout-rule");
 		});
 
 		it("should handle duplicate English headings", async () => {
 			const markdown = "# Title\n\n# Title\n\n# Title";
 			const result = await markdownToHtml(markdown);
-			expect(result).toContain("title");
-			expect(result).toContain("title-1");
-			expect(result).toContain("title-2");
+			expect(result.html).toContain("title");
+			expect(result.html).toContain("title-1");
+			expect(result.html).toContain("title-2");
 		});
 
 		it("should generate IDs for headings with special characters", async () => {
 			const markdown = "# Hello, World!\n\n## Test (Example)";
 			const result = await markdownToHtml(markdown);
-			expect(result).toContain("hello-world");
-			expect(result).toContain("test-example");
+			expect(result.html).toContain("hello-world");
+			expect(result.html).toContain("test-example");
 		});
 	});
 
@@ -251,28 +251,87 @@ Normal text here.
 		it("should parse frontmatter and render as structured HTML", async () => {
 			const markdown = "---\ntitle: Hello World\nauthor: John Doe\n---";
 			const result = await markdownToHtml(markdown);
-			expect(result).toContain('<div class="frontmatter-container">');
-			expect(result).toContain('<div class="frontmatter-label">title</div>');
-			expect(result).toContain(
+			expect(result.html).toContain('<div class="frontmatter-container">');
+			expect(result.html).toContain(
+				'<div class="frontmatter-label">title</div>',
+			);
+			expect(result.html).toContain(
 				'<div class="frontmatter-value">Hello World</div>',
 			);
-			expect(result).toContain('<div class="frontmatter-label">author</div>');
-			expect(result).toContain('<div class="frontmatter-value">John Doe</div>');
+			expect(result.html).toContain(
+				'<div class="frontmatter-label">author</div>',
+			);
+			expect(result.html).toContain(
+				'<div class="frontmatter-value">John Doe</div>',
+			);
 		});
 
 		it("should handle date objects correctly", async () => {
 			// Using a date string that js-yaml will parse as a Date object
 			const markdown = "---\ndate: 2024-01-01\n---";
 			const result = await markdownToHtml(markdown);
-			expect(result).toContain('<div class="frontmatter-label">date</div>');
+			expect(result.html).toContain(
+				'<div class="frontmatter-label">date</div>',
+			);
 			// The exact format might depend on locale, but let's check for the year at least
-			expect(result).toContain("2024");
+			expect(result.html).toContain("2024");
 		});
 
 		it("should ignore invalid yaml", async () => {
 			const markdown = "---\n: invalid yaml\n---";
 			const result = await markdownToHtml(markdown);
-			expect(result).not.toContain('<div class="frontmatter-container">');
+			expect(result.html).not.toContain('<div class="frontmatter-container">');
+		});
+	});
+
+	describe("Metadata extraction", () => {
+		it("should extract title and description from frontmatter", async () => {
+			const markdown =
+				"---\ntitle: My Title\ndescription: My Description\n---\n# Heading";
+			const result = await markdownToHtml(markdown);
+			expect(result.metadata.title).toBe("My Title");
+			expect(result.metadata.description).toBe("My Description");
+		});
+
+		it("should fallback to first heading for title", async () => {
+			const markdown = "# First Heading\n\nSome paragraph text.";
+			const result = await markdownToHtml(markdown);
+			expect(result.metadata.title).toBe("First Heading");
+		});
+
+		it("should fallback to first paragraph for description", async () => {
+			const markdown = "# Heading\n\nThis is the first paragraph.";
+			const result = await markdownToHtml(markdown);
+			expect(result.metadata.description).toBe("This is the first paragraph.");
+		});
+
+		it("should prefer frontmatter over heading/paragraph", async () => {
+			const markdown =
+				"---\ntitle: FM Title\ndescription: FM Desc\n---\n# Heading\n\nParagraph";
+			const result = await markdownToHtml(markdown);
+			expect(result.metadata.title).toBe("FM Title");
+			expect(result.metadata.description).toBe("FM Desc");
+		});
+
+		it("should return empty metadata for empty markdown", async () => {
+			const markdown = "";
+			const result = await markdownToHtml(markdown);
+			expect(result.metadata.title).toBeUndefined();
+			expect(result.metadata.description).toBeUndefined();
+		});
+
+		it("should return empty metadata when no extractable content exists", async () => {
+			const markdown = "```javascript\nconst x = 1;\n```";
+			const result = await markdownToHtml(markdown);
+			expect(result.metadata.title).toBeUndefined();
+			expect(result.metadata.description).toBeUndefined();
+		});
+
+		it("should return empty metadata for markdown with only whitespace", async () => {
+			const markdown = "   \n\n   \n";
+			const result = await markdownToHtml(markdown);
+			expect(result.metadata.title).toBeUndefined();
+			expect(result.metadata.description).toBeUndefined();
 		});
 	});
 });

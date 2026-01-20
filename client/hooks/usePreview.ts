@@ -34,7 +34,7 @@ export function usePreview({ file, theme, expirationDays }: UsePreviewProps) {
 				const markdown = await file.text();
 				if (isCancelled) return;
 
-				const html = await markdownToHtml(markdown);
+				const { html } = await markdownToHtml(markdown);
 				const expirationTime =
 					Date.now() + expirationDays * 24 * 60 * 60 * 1000;
 				const previewHtml = createHtmlPage({

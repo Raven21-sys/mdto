@@ -90,7 +90,7 @@ export async function handleUpload(
 			return exception("Markdown content is required", 400);
 		}
 
-		const html = await markdownToHtml(markdown);
+		const { html, metadata } = await markdownToHtml(markdown);
 
 		const slug = await retryUntil(
 			async () => generateSlug(),
@@ -119,6 +119,8 @@ export async function handleUpload(
 			},
 			customMetadata: {
 				theme,
+				title: metadata.title || "",
+				description: metadata.description || "",
 			},
 		});
 
