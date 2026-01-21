@@ -1,6 +1,6 @@
 import notFoundPage from "@shared/templates/not-found.html";
 import { TEMPLATE_HASH } from "@shared/templates/template-hash.generated";
-import { createHtmlPage } from "@shared/templates/view.template";
+import { ViewTemplate } from "@shared/templates/view.template";
 import { Hono } from "hono";
 import { cacheControlHeader, generateETag } from "../utils/cache";
 import { isValidSlug } from "../utils/slug";
@@ -75,22 +75,24 @@ viewRouter.get("/:prefix/:slug", async (c) => {
 		const expirationTime = uploadTime + expirationDays * 24 * 60 * 60 * 1000;
 		const expiresAt = expirationTime.toString();
 
-		const htmlPage = createHtmlPage({
-			title: metaTitle || slug,
-			description: metaDescription,
-			html,
-			expiresAt,
-			theme,
-			markdown,
-			hasKatex,
-			hasMermaid,
-		});
-
 		const cacheHeader = cacheControlHeader(600);
 
 		c.header("Cache-Control", cacheHeader);
 		c.header("ETag", etag);
-		return c.html(htmlPage);
+		return c.html(
+			`<!DOCTYPE html>${(
+				<ViewTemplate
+					title={metaTitle || slug}
+					description={metaDescription}
+					html={html}
+					expiresAt={expiresAt}
+					theme={theme}
+					markdown={markdown}
+					hasKatex={hasKatex}
+					hasMermaid={hasMermaid}
+				/>
+			)}`,
+		);
 	} catch (error) {
 		console.error("View error:", error);
 		c.header("Cache-Control", "no-cache");

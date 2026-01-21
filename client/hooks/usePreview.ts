@@ -1,4 +1,4 @@
-import { createHtmlPage } from "@shared/templates/view.template";
+import { ViewTemplate } from "@shared/templates/view.template";
 import { markdownToHtml } from "@shared/utils/markdown";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -39,7 +39,7 @@ export function usePreview({ file, theme, expirationDays }: UsePreviewProps) {
 				const { html, metadata } = await markdownToHtml(markdown);
 				const expirationTime =
 					Date.now() + expirationDays * 24 * 60 * 60 * 1000;
-				const previewHtml = createHtmlPage({
+				const previewHtml = ViewTemplate({
 					title: `Preview - ${themeName}`,
 					expiresAt: expirationTime.toString(),
 					html,
@@ -58,7 +58,7 @@ export function usePreview({ file, theme, expirationDays }: UsePreviewProps) {
 				if (iframeDoc) {
 					iframe.addEventListener("load", handleLoad, { once: true });
 					iframeDoc.open();
-					iframeDoc.write(previewHtml);
+					iframeDoc.write(previewHtml.toString());
 					iframeDoc.close();
 				} else {
 					setLoading(false);

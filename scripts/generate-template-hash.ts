@@ -7,14 +7,14 @@ const root = resolve(import.meta.dirname, "..");
 /**
  * Generate a hash from template and theme files for ETag versioning.
  * This hash changes when any of the following files are modified:
- * - shared/templates/view.template.ts
+ * - shared/templates/view.template.tsx
  * - public/themes/*.css
  */
 function generateTemplateHash(): string {
 	const hash = createHash("md5");
 
-	// Add view.template.ts content
-	const templatePath = resolve(root, "shared/templates/view.template.ts");
+	// Add view.template.tsx content
+	const templatePath = resolve(root, "shared/templates/view.template.tsx");
 	const templateContent = readFileSync(templatePath, "utf-8");
 	hash.update(templateContent);
 
