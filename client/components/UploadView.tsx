@@ -1,4 +1,5 @@
 import {
+	Alert01Icon,
 	Eye,
 	File,
 	InformationCircleIcon,
@@ -14,6 +15,7 @@ interface UploadViewProps {
 	expirationDays: number;
 	selectedTheme: string;
 	isUploading: boolean;
+	uploadError: string | null;
 	fileInputRef: RefObject<HTMLInputElement | null>;
 	isPreviewOpen: boolean;
 	isPreviewLoading: boolean;
@@ -29,6 +31,7 @@ export function UploadView({
 	expirationDays,
 	selectedTheme,
 	isUploading,
+	uploadError,
 	fileInputRef,
 	isPreviewOpen,
 	isPreviewLoading,
@@ -264,12 +267,19 @@ export function UploadView({
 						"disabled:bg-surface! disabled:bg-none! disabled:border-border disabled:text-text-tertiary disabled:cursor-not-allowed disabled:opacity-100 disabled:shadow-none",
 						isUploading &&
 							"bg-surface! bg-none! border-border text-text-tertiary cursor-not-allowed opacity-100 shadow-none",
+						uploadError &&
+							"bg-red-500/10! border-red-500/50! text-red-500! shadow-none animate-shake",
 					)}
-					disabled={!selectedFile || isUploading}
+					disabled={!selectedFile || isUploading || !!uploadError}
 					onClick={onUpload}
 				>
 					{isUploading ? (
 						<div className="w-3.5 h-3.5 border-2 border-white/30 rounded-full border-t-white animate-spin" />
+					) : uploadError ? (
+						<>
+							<HugeiconsIcon icon={Alert01Icon} className="w-3.5 h-3.5" />
+							<span>Try later</span>
+						</>
 					) : (
 						<span>Create Page</span>
 					)}

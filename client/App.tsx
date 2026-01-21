@@ -30,18 +30,19 @@ export function App() {
 		closePreview,
 	} = usePreviewState();
 
-	const { isUploading, uploadedUrl, handleUpload, handleReset } = useUpload({
-		file: selectedFile,
-		expirationDays,
-		theme: selectedTheme,
-		turnstileToken,
-		onSuccess: closePreview,
-		onClearFile: () => {
-			clearSelection();
-			setExpirationDays(30);
-			setSelectedTheme("default");
-		},
-	});
+	const { isUploading, uploadedUrl, uploadError, handleUpload, handleReset } =
+		useUpload({
+			file: selectedFile,
+			expirationDays,
+			theme: selectedTheme,
+			turnstileToken,
+			onSuccess: closePreview,
+			onClearFile: () => {
+				clearSelection();
+				setExpirationDays(30);
+				setSelectedTheme("default");
+			},
+		});
 
 	useKeyboardShortcuts({
 		onOpenFile: () => fileInputRef.current?.click(),
@@ -134,6 +135,7 @@ export function App() {
 								expirationDays={expirationDays}
 								selectedTheme={selectedTheme}
 								isUploading={isUploading}
+								uploadError={uploadError}
 								fileInputRef={fileInputRef}
 								onFileSelect={handleFileSelect}
 								onExpirationChange={setExpirationDays}

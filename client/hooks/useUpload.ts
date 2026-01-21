@@ -13,6 +13,7 @@ interface UseUploadOptions {
 interface UseUploadReturn {
 	isUploading: boolean;
 	uploadedUrl: string | null;
+	uploadError: string | null;
 	handleUpload: () => Promise<void>;
 	handleReset: () => void;
 }
@@ -27,12 +28,14 @@ export function useUpload({
 }: UseUploadOptions): UseUploadReturn {
 	const [isUploading, setIsUploading] = useState(false);
 	const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+	const [uploadError, setUploadError] = useState<string | null>(null);
 	const turnstile = useTurnstile();
 
 	const handleUpload = useCallback(async () => {
 		if (!file) return;
 
 		setIsUploading(true);
+		setUploadError(null);
 
 		try {
 			const text = await file.text();
@@ -63,9 +66,10 @@ export function useUpload({
 			}
 		} catch (error) {
 			turnstile.reset();
-			alert(
-				`Failed to create page: ${error instanceof Error ? error.message : "Unknown error"}`,
-			);
+			const message = error instanceof Error ? error.message : "Unknown error";
+			setUploadError(message);
+			// Auto clear error after 2 seconds
+			setTimeout(() => setUploadError(null), 2000);
 		} finally {
 			setIsUploading(false);
 		}
@@ -73,12 +77,14 @@ export function useUpload({
 
 	const handleReset = useCallback(() => {
 		setUploadedUrl(null);
+		setUploadError(null);
 		onClearFile?.();
 	}, [onClearFile]);
 
 	return {
 		isUploading,
 		uploadedUrl,
+		uploadError,
 		handleUpload,
 		handleReset,
 	};
