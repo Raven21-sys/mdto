@@ -408,3 +408,7 @@ footer a:hover {
 		display: none;
 	}
 }
+
+.mermaid {
+	text-align: center;
+}

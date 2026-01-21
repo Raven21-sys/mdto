@@ -137,6 +137,8 @@ interface CreateHtmlPageOptions {
 	expiresAt: string;
 	markdown?: string;
 	theme?: string;
+	hasKatex?: boolean;
+	hasMermaid?: boolean;
 }
 
 export function createHtmlPage(options: CreateHtmlPageOptions): string {
@@ -147,6 +149,8 @@ export function createHtmlPage(options: CreateHtmlPageOptions): string {
 		expiresAt,
 		markdown,
 		theme = "default",
+		hasKatex,
+		hasMermaid,
 	} = options;
 	const { themePath, hljsThemePath } = getThemePaths(theme);
 	const metaDescription = description || defaultDescription;
@@ -207,6 +211,7 @@ export function createHtmlPage(options: CreateHtmlPageOptions): string {
 	// Extract function bodies and wrap them in IIFEs
 	const themeToggleBody = getFunctionBody(initThemeToggle);
 	const exportActionsBody = getFunctionBody(initExportActions);
+
 	const scriptsHtml = `
 	<script>
 		(function() {
@@ -215,7 +220,45 @@ export function createHtmlPage(options: CreateHtmlPageOptions): string {
 		(function() {
 			${exportActionsBody}
 		})();
-	</script>`;
+	</script>${
+		hasMermaid
+			? `
+	<script type="module">
+		const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs');
+		const html = document.documentElement;
+
+		function getIsDark() {
+			const dataTheme = html.getAttribute('data-theme');
+			const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			return dataTheme === 'dark' || (!dataTheme && systemDark);
+		}
+
+		async function renderMermaid() {
+			const containers = document.querySelectorAll('.mermaid[data-source]');
+			containers.forEach((el) => {
+				el.removeAttribute('data-processed');
+				el.innerHTML = el.getAttribute('data-source');
+			});
+			mermaid.initialize({ startOnLoad: false, theme: getIsDark() ? 'dark' : 'default', gannt: { useMaxWidth: false } });
+			await mermaid.run();
+		}
+
+		const mermaidBlocks = document.querySelectorAll('pre > code.language-mermaid');
+
+		mermaidBlocks.forEach((el) => {
+			const pre = el.parentElement;
+			const container = document.createElement('div');
+			container.className = 'mermaid';
+			container.setAttribute('data-source', el.textContent);
+			container.textContent = el.textContent;
+			pre.parentNode.replaceChild(container, pre);
+		});
+		await renderMermaid();
+
+		new MutationObserver(() => renderMermaid()).observe(html, { attributes: true, attributeFilter: ['data-theme'] });
+	</script>`
+			: ""
+	}`;
 
 	let footerHtml = "";
 	try {
@@ -241,8 +284,12 @@ export function createHtmlPage(options: CreateHtmlPageOptions): string {
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="${themePath}">
-	<link rel="stylesheet" href="${hljsThemePath}">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew" crossorigin="anonymous">
+	<link rel="stylesheet" href="${hljsThemePath}">${
+		hasKatex
+			? `
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-Pu5+C18nP5dwykLJOhd2U4Xen7rjScHN/qusop27hdd2drI+lL5KvX7YntvT8yew" crossorigin="anonymous">`
+			: ""
+	}
 </head>
 <body>
 	<div class="top-actions">

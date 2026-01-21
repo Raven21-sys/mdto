@@ -121,6 +121,9 @@ export async function handleUpload(
 				theme,
 				title: metadata.title || "",
 				description: metadata.description || "",
+				hasCodeBlock: metadata.hasCodeBlock ? "1" : "",
+				hasKatex: metadata.hasKatex ? "1" : "",
+				hasMermaid: metadata.hasMermaid ? "1" : "",
 			},
 		});
 

@@ -36,7 +36,7 @@ export function usePreview({ file, theme, expirationDays }: UsePreviewProps) {
 
 				await new Promise((resolve) => setTimeout(resolve, 100));
 
-				const { html } = await markdownToHtml(markdown);
+				const { html, metadata } = await markdownToHtml(markdown);
 				const expirationTime =
 					Date.now() + expirationDays * 24 * 60 * 60 * 1000;
 				const previewHtml = createHtmlPage({
@@ -45,6 +45,8 @@ export function usePreview({ file, theme, expirationDays }: UsePreviewProps) {
 					html,
 					theme,
 					markdown,
+					hasKatex: metadata.hasKatex,
+					hasMermaid: metadata.hasMermaid,
 				});
 
 				if (!iframe) {

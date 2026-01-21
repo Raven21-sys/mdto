@@ -451,3 +451,7 @@ footer a:hover {
 .export-option.copied .option-check {
 	display: block;
 }
+
+.mermaid {
+	text-align: center;
+}

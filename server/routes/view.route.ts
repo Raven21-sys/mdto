@@ -33,6 +33,9 @@ export async function handleView(
 		const theme = object.customMetadata?.theme || "default";
 		const metaTitle = object.customMetadata?.title || "";
 		const metaDescription = object.customMetadata?.description || "";
+		// const hasCodeBlock = object.customMetadata?.hasCodeBlock === "1";
+		const hasKatex = object.customMetadata?.hasKatex === "1";
+		const hasMermaid = object.customMetadata?.hasMermaid === "1";
 
 		let markdown: string | undefined;
 		let html: string;
@@ -77,6 +80,8 @@ export async function handleView(
 			expiresAt,
 			theme,
 			markdown,
+			hasKatex,
+			hasMermaid,
 		});
 
 		const cacheHeader = cacheControlHeader(600);

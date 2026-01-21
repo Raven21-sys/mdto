@@ -18,6 +18,9 @@ import { visit } from "unist-util-visit";
 export interface MarkdownMetadata {
 	title?: string;
 	description?: string;
+	hasKatex?: boolean;
+	hasMermaid?: boolean;
+	hasCodeBlock?: boolean;
 }
 
 const MAX_TITLE_LENGTH = 60;
@@ -161,6 +164,21 @@ function remarkExtractMetadata(metadata: MarkdownMetadata) {
 				);
 				foundParagraph = true;
 			}
+
+			// Detect KaTeX (math nodes created by remarkMath)
+			if (node.type === "math" || node.type === "inlineMath") {
+				metadata.hasKatex = true;
+			}
+
+			// Detect code blocks
+			if (node.type === "code") {
+				const lang = (node as { lang?: string }).lang;
+				if (lang === "mermaid") {
+					metadata.hasMermaid = true;
+				} else {
+					metadata.hasCodeBlock = true;
+				}
+			}
 		});
 	};
 }
@@ -179,8 +197,8 @@ export async function markdownToHtml(
 		.use(remarkParse)
 		.use(remarkFrontmatter)
 		.use(remarkGfm)
-		.use(() => remarkExtractMetadata(metadata))
 		.use(remarkMath)
+		.use(() => remarkExtractMetadata(metadata))
 		// @ts-expect-error - Handler signature is correct but TypeScript can't infer it
 		.use(remarkRehype, {
 			allowDangerousHtml: true,
