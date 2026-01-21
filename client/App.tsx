@@ -2,6 +2,7 @@ import { Github } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useState } from "react";
 import Turnstile from "react-turnstile";
+import { Features } from "./components/Features";
 import { PreviewDialog } from "./components/PreviewDialog";
 import { PreviewPane } from "./components/PreviewPane";
 import { SuccessView } from "./components/SuccessView";
@@ -60,8 +61,8 @@ export function App() {
 			{/* Main Container - Conditional Styles for Split View */}
 			<div
 				className={cn(
-					"relative z-1 w-full flex flex-col items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-					"min-h-screen w-full max-w-[480px] px-5",
+					"relative z-1 w-full flex flex-col items-center justify-center py-8 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+					"min-h-screen px-5",
 					showPreview &&
 						selectedFile &&
 						"md:max-w-none md:px-0 md:h-screen md:grid md:items-start md:justify-start",
@@ -108,13 +109,12 @@ export function App() {
 					</button>
 				)}
 
-				{/* Right Pane (Upload/Settings) */}
 				<div
 					className={cn(
-						"w-full flex flex-col items-center justify-center",
+						"w-full flex flex-col items-center my-auto justify-center",
 						showPreview && "md:h-full md:p-6 md:bg-background",
 						// Only apply layout styles when not in preview mode or on mobile
-						!(showPreview && selectedFile) && "max-w-[440px] mx-auto",
+						!(showPreview && selectedFile) && "mx-auto",
 					)}
 				>
 					{/* Logo */}
@@ -146,8 +146,10 @@ export function App() {
 						)}
 					</div>
 
+					{!uploadedUrl && <Features />}
+
 					{/* Footer - Only visible in centered mode or right pane */}
-					<div className="mt-10 text-center text-xs text-text-tertiary opacity-60 transition-opacity duration-200 hover:opacity-100">
+					<div className="hidden md:block mt-4 text-center text-xs text-text-tertiary opacity-60 transition-opacity duration-200 hover:opacity-100">
 						Press{" "}
 						<span className="bg-white/5 border border-border rounded px-1.5 py-0.5 ml-1.5 text-[10px] align-middle text-text-secondary font-inherit">
 							⌘ O
@@ -156,7 +158,7 @@ export function App() {
 					</div>
 
 					{/* GitHub Link */}
-					<div className="flex justify-center mt-4">
+					<div className="flex justify-center mt-4 md:mt-16">
 						<a
 							href="https://github.com/hjinco/mdto"
 							target="_blank"
