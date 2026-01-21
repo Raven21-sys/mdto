@@ -298,6 +298,13 @@ footer a:hover {
 	.top-actions {
 		display: none;
 	}
+
+	:root,
+	body {
+		background-color: var(--bg-root);
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
 }
 
 .theme-toggle .icon-sun {

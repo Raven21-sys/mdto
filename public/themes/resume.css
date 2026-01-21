@@ -227,6 +227,13 @@ footer a:hover {
 }
 
 @media print {
+	:root,
+	body {
+		background-color: var(--bg-root);
+		-webkit-print-color-adjust: exact;
+		print-color-adjust: exact;
+	}
+
 	body {
 		margin: 0;
 		padding: 2cm;
