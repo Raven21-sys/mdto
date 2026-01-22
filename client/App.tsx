@@ -9,6 +9,7 @@ import { SuccessView } from "./components/SuccessView";
 import { UploadView } from "./components/UploadView";
 import { useFileSelection } from "./hooks/useFileSelection";
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
+import { usePaste } from "./hooks/usePaste";
 import { usePreviewState } from "./hooks/usePreviewState";
 import { useResizablePane } from "./hooks/useResizablePane";
 import { useUpload } from "./hooks/useUpload";
@@ -49,6 +50,11 @@ export function App() {
 		onClosePreview: closePreview,
 		canOpenFile: !uploadedUrl,
 		canClosePreview: showPreview,
+	});
+
+	usePaste({
+		onPaste: handleFileSelect,
+		canPaste: !uploadedUrl,
 	});
 
 	const {

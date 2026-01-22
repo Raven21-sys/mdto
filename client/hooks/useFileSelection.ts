@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const ALLOWED_EXTENSIONS = [".md", ".markdown", ".txt"];
+export const ALLOWED_EXTENSIONS = [".md", ".markdown", ".txt"];
 
 export function useFileSelection() {
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);

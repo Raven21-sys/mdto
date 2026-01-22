@@ -8,6 +8,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { RefObject } from "react";
 import { useCallback, useMemo, useState } from "react";
+import { useMetaSymbol } from "../hooks/useMetaSymbol";
 import { cn } from "../utils/styles";
 
 interface UploadViewProps {
@@ -42,6 +43,7 @@ export function UploadView({
 	onUpload,
 }: UploadViewProps) {
 	const [isDragover, setIsDragover] = useState(false);
+	const metaSymbol = useMetaSymbol();
 
 	const expirationDate = useMemo(() => {
 		const date = new Date();
@@ -166,7 +168,11 @@ export function UploadView({
 						</>
 					) : (
 						<>
-							Drop your .md file here or click to browse
+							Drop your .md file
+							<span className="hidden md:inline">
+								{" "}
+								or paste ({metaSymbol} + V)
+							</span>
 							<br />
 							<span className="opacity-50 text-[11px] mt-1.5 inline-block">
 								Maximum 100KB
