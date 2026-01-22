@@ -174,3 +174,5 @@ public/index.html
 
 # SSR build output
 dist-ssr/
+
+.DS_Store
