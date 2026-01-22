@@ -405,6 +405,10 @@ footer a:hover {
 	.top-actions {
 		display: none;
 	}
+
+	footer {
+		display: none;
+	}
 }
 
 .mermaid {
