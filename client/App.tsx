@@ -183,7 +183,7 @@ export function App() {
 
 			{import.meta.env.PROD && (
 				<Turnstile
-					className="self-center hidden"
+					className={cn("self-center", turnstileToken && "hidden")}
 					sitekey={import.meta.env.VITE_PUBLIC_TURNSTILE_SITE_KEY}
 					appearance="interaction-only"
 					theme="dark"
