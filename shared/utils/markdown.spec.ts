@@ -1,5 +1,19 @@
-import { describe, expect, it } from "vitest";
+import type iso6393To1 from "iso-639-3-to-1";
+import { describe, expect, it, vi } from "vitest";
 import { markdownToHtml } from "./markdown";
+
+// `iso-639-3-to-1` is a CommonJS module that uses `require` internally.
+// In Cloudflare Workers with `nodejs_compat` this works in production,
+// but Vitest's Workers pool does not always honor `compatibility_flags`,
+// so module initialization can fail. We mock it here to keep tests stable.
+vi.mock("iso-639-3-to-1", () => {
+	return {
+		default: (code: string) => {
+			if (code === "eng") return "en" as const;
+			return undefined;
+		},
+	} as unknown as typeof iso6393To1;
+});
 
 describe("markdownToHtml security tests", () => {
 	describe("XSS prevention - Script tags", () => {
@@ -332,6 +346,12 @@ Normal text here.
 			const result = await markdownToHtml(markdown);
 			expect(result.metadata.title).toBeUndefined();
 			expect(result.metadata.description).toBeUndefined();
+		});
+
+		it("should set metadata.lang using iso6393To1 mapping", async () => {
+			const markdown = "# Hello world\n\nThis is an english sentence.";
+			const result = await markdownToHtml(markdown);
+			expect(result.metadata.lang).toBe("en");
 		});
 	});
 });

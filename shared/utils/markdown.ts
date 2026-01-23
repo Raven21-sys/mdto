@@ -1,5 +1,4 @@
 import { franc } from "franc-min";
-// @ts-expect-error - No declaration file found
 import iso6393To1 from "iso-639-3-to-1";
 import yaml from "js-yaml";
 import type { Root } from "mdast";
