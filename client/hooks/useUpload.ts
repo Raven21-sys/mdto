@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { useTurnstile } from "react-turnstile";
 
 interface UseUploadOptions {
 	file: File | null;

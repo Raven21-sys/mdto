@@ -68,7 +68,7 @@ export function App() {
 			{/* Main Container - Conditional Styles for Split View */}
 			<div
 				className={cn(
-					"relative z-1 w-full flex flex-col items-center justify-center py-8 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+					"relative z-1 w-full flex flex-col items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
 					"min-h-screen px-5",
 					showPreview &&
 						selectedFile &&
@@ -136,21 +136,41 @@ export function App() {
 						{uploadedUrl ? (
 							<SuccessView url={uploadedUrl} onReset={handleReset} />
 						) : (
-							<UploadView
-								selectedFile={selectedFile}
-								expirationDays={expirationDays}
-								selectedTheme={selectedTheme}
-								isUploading={isUploading}
-								uploadError={uploadError}
-								fileInputRef={fileInputRef}
-								onFileSelect={handleFileSelect}
-								onExpirationChange={setExpirationDays}
-								onThemeChange={setSelectedTheme}
-								onPreview={togglePreview}
-								isPreviewOpen={showPreview}
-								isPreviewLoading={isPreviewLoading}
-								onUpload={handleUpload}
-							/>
+							<div className="flex flex-col gap-2">
+								<UploadView
+									selectedFile={selectedFile}
+									expirationDays={expirationDays}
+									selectedTheme={selectedTheme}
+									isUploading={isUploading}
+									uploadError={uploadError}
+									fileInputRef={fileInputRef}
+									onFileSelect={handleFileSelect}
+									onExpirationChange={setExpirationDays}
+									onThemeChange={setSelectedTheme}
+									onPreview={togglePreview}
+									isPreviewOpen={showPreview}
+									isPreviewLoading={isPreviewLoading}
+									onUpload={handleUpload}
+								/>
+								{import.meta.env.PROD && (
+									<Turnstile
+										className={cn("self-center", turnstileToken && "hidden")}
+										sitekey={import.meta.env.VITE_PUBLIC_TURNSTILE_SITE_KEY}
+										appearance="interaction-only"
+										theme="dark"
+										fixedSize
+										onVerify={(token) => {
+											setTurnstileToken(token);
+										}}
+										onExpire={() => {
+											setTurnstileToken(null);
+										}}
+										onError={() => {
+											setTurnstileToken(null);
+										}}
+									/>
+								)}
+							</div>
 						)}
 					</div>
 
@@ -180,25 +200,6 @@ export function App() {
 					</div>
 				</div>
 			</div>
-
-			{import.meta.env.PROD && (
-				<Turnstile
-					className={cn("self-center", turnstileToken && "hidden")}
-					sitekey={import.meta.env.VITE_PUBLIC_TURNSTILE_SITE_KEY}
-					appearance="interaction-only"
-					theme="dark"
-					fixedSize
-					onVerify={(token) => {
-						setTurnstileToken(token);
-					}}
-					onExpire={() => {
-						setTurnstileToken(null);
-					}}
-					onError={() => {
-						setTurnstileToken(null);
-					}}
-				/>
-			)}
 
 			{/* Mobile Preview Dialog */}
 			{showPreview && selectedFile && (
