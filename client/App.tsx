@@ -68,7 +68,7 @@ export function App() {
 			{/* Main Container - Conditional Styles for Split View */}
 			<div
 				className={cn(
-					"relative z-1 w-full pt-18 md:pt-36 flex flex-col items-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+					"relative z-1 w-full flex flex-col items-center justify-center transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
 					"min-h-screen px-5",
 					showPreview &&
 						selectedFile &&
