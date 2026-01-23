@@ -31,7 +31,6 @@ export function TurnstileWidget({
 			sitekey={import.meta.env.VITE_PUBLIC_TURNSTILE_SITE_KEY}
 			appearance="interaction-only"
 			theme="dark"
-			fixedSize
 			onVerify={onVerify}
 			onExpire={onExpire}
 			onError={onError}
