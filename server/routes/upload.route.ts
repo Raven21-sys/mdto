@@ -117,6 +117,7 @@ uploadRouter.post("/api/upload", async (c) => {
 		},
 		customMetadata: {
 			theme,
+			lang: metadata.lang || "",
 			title: metadata.title || "",
 			description: metadata.description || "",
 			hasCodeBlock: metadata.hasCodeBlock ? "1" : "",

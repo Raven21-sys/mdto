@@ -40,7 +40,9 @@ export function usePreview({ file, theme, expirationDays }: UsePreviewProps) {
 				const expirationTime =
 					Date.now() + expirationDays * 24 * 60 * 60 * 1000;
 				const previewHtml = ViewTemplate({
+					lang: metadata.lang,
 					title: `Preview - ${themeName}`,
+					description: metadata.description,
 					expiresAt: expirationTime.toString(),
 					html,
 					theme,

@@ -1,3 +1,6 @@
+import { franc } from "franc-min";
+// @ts-expect-error - No declaration file found
+import iso6393To1 from "iso-639-3-to-1";
 import yaml from "js-yaml";
 import type { Root } from "mdast";
 import { toString as mdastToString } from "mdast-util-to-string";
@@ -16,6 +19,7 @@ import { unified } from "unified";
 import { visit } from "unist-util-visit";
 
 export interface MarkdownMetadata {
+	lang?: string;
 	title?: string;
 	description?: string;
 	hasKatex?: boolean;
@@ -192,6 +196,18 @@ export async function markdownToHtml(
 	markdown: string,
 ): Promise<MarkdownResult> {
 	const metadata: MarkdownMetadata = {};
+
+	// Detect language using franc (sample first 300 chars for performance)
+	const sample = markdown.slice(0, 300);
+	const iso639_3Code = franc(sample);
+	// franc returns 'und' (undetermined) if detection fails
+	if (iso639_3Code !== "und") {
+		// Convert ISO 639-3 to ISO 639-1 for HTML lang attribute
+		const langInfo = iso6393To1(iso639_3Code);
+		if (langInfo) {
+			metadata.lang = langInfo;
+		}
+	}
 
 	const processor = unified()
 		.use(remarkParse)

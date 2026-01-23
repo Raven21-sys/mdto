@@ -399,6 +399,7 @@ const Footer = ({ expiresAt }: FooterProps) => {
 };
 
 interface CreateHtmlPageOptions {
+	lang?: string;
 	title: string;
 	description?: string;
 	html: string;
@@ -411,6 +412,7 @@ interface CreateHtmlPageOptions {
 
 export function ViewTemplate(options: CreateHtmlPageOptions) {
 	const {
+		lang,
 		title,
 		description,
 		html: htmlContent,
@@ -424,7 +426,7 @@ export function ViewTemplate(options: CreateHtmlPageOptions) {
 	const metaDescription = description || defaultDescription;
 
 	return (
-		<html lang="en">
+		<html lang={lang || "en"}>
 			<head>
 				<meta charset="UTF-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />

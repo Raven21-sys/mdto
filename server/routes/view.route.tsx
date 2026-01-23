@@ -57,6 +57,7 @@ viewRouter.get("/:prefix/:slug", async (c) => {
 
 	const contentType = object.httpMetadata?.contentType || "text/html";
 	const theme = object.customMetadata?.theme || "default";
+	const lang = object.customMetadata?.lang || "";
 	const metaTitle = object.customMetadata?.title || "";
 	const metaDescription = object.customMetadata?.description || "";
 	// const hasCodeBlock = object.customMetadata?.hasCodeBlock === "1";
@@ -104,6 +105,7 @@ viewRouter.get("/:prefix/:slug", async (c) => {
 			expiresAt={expiresAt}
 			theme={theme}
 			markdown={markdown}
+			lang={lang}
 			hasKatex={hasKatex}
 			hasMermaid={hasMermaid}
 		/>
