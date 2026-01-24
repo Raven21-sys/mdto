@@ -6,7 +6,8 @@ import {
 } from "@tanstack/react-router";
 import appCss from "../globals.css?url";
 
-const SITE_TITLE = "mdto.page – Convert & share Markdown as beautiful HTML & PDF";
+const SITE_TITLE =
+	"mdto.page – Convert & share Markdown as beautiful HTML & PDF";
 const SITE_DESCRIPTION =
 	"Convert Markdown to beautiful HTML/PDF pages and share instantly with clean templates — no login required on mdto.page.";
 

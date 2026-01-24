@@ -8,6 +8,7 @@ import { SuccessView } from "../components/SuccessView";
 import { TurnstileWidget } from "../components/TurnstileWidget";
 import { UploadView } from "../components/UploadView";
 import { UserMenu } from "../components/UserMenu";
+import { WarningDialog } from "../components/WarningDialog";
 import { useFileSelection } from "../hooks/useFileSelection";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
 import { usePaste } from "../hooks/usePaste";
@@ -35,6 +36,7 @@ function Home() {
 	const [selectedTheme, setSelectedTheme] = useState("default");
 	const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 	const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+	const [isWarningDialogOpen, setIsWarningDialogOpen] = useState(false);
 
 	const { data: session } = authClient.useSession();
 
@@ -80,6 +82,14 @@ function Home() {
 		isResizing,
 		startResizing: handleMouseDown,
 	} = useResizablePane();
+
+	const handleUploadClick = () => {
+		if (!session?.user) {
+			setIsWarningDialogOpen(true);
+			return;
+		}
+		handleUpload();
+	};
 
 	return (
 		<>
@@ -171,7 +181,7 @@ function Home() {
 								isPreviewOpen={showPreview}
 								isPreviewLoading={isPreviewLoading}
 								turnstileToken={turnstileToken}
-								onUpload={handleUpload}
+								onUpload={handleUploadClick}
 							/>
 						)}
 					</div>
@@ -237,6 +247,13 @@ function Home() {
 			<LoginModal
 				isOpen={isLoginModalOpen}
 				onClose={() => setIsLoginModalOpen(false)}
+			/>
+
+			{/* Warning Dialog */}
+			<WarningDialog
+				isOpen={isWarningDialogOpen}
+				onClose={() => setIsWarningDialogOpen(false)}
+				onLogin={() => setIsLoginModalOpen(true)}
 			/>
 
 			{/* Mobile Preview Dialog */}
