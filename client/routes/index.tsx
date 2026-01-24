@@ -1,11 +1,9 @@
 import { Github } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Features } from "../components/Features";
 import { LoginModal } from "../components/LoginModal";
-import { PreviewDialog } from "../components/PreviewDialog";
-import { PreviewPane } from "../components/PreviewPane";
 import { SuccessView } from "../components/SuccessView";
 import { TurnstileWidget } from "../components/TurnstileWidget";
 import { UploadView } from "../components/UploadView";
@@ -18,6 +16,15 @@ import { useResizablePane } from "../hooks/useResizablePane";
 import { useUpload } from "../hooks/useUpload";
 import { authClient } from "../lib/auth-client";
 import { cn } from "../utils/styles";
+
+const PreviewPane = lazy(() =>
+	import("../components/PreviewPane").then((m) => ({ default: m.PreviewPane })),
+);
+const PreviewDialog = lazy(() =>
+	import("../components/PreviewDialog").then((m) => ({
+		default: m.PreviewDialog,
+	})),
+);
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -94,20 +101,23 @@ function Home() {
 				}
 			>
 				{/* Left Pane (Preview) - Desktop Only */}
-				{showPreview && selectedFile && (
+				{selectedFile && (
 					<div
 						className={cn(
-							"hidden md:block h-full w-full overflow-hidden",
+							"hidden h-full w-full overflow-hidden",
 							isResizing && "pointer-events-none",
+							showPreview && "md:block",
 						)}
 					>
-						<PreviewPane
-							file={selectedFile}
-							theme={selectedTheme}
-							expirationDays={expirationDays}
-							onClose={closePreview}
-							onLoadingChange={setIsPreviewLoading}
-						/>
+						<Suspense fallback={null}>
+							<PreviewPane
+								file={selectedFile}
+								theme={selectedTheme}
+								expirationDays={expirationDays}
+								onClose={closePreview}
+								onLoadingChange={setIsPreviewLoading}
+							/>
+						</Suspense>
 					</div>
 				)}
 
@@ -229,14 +239,16 @@ function Home() {
 			/>
 
 			{/* Mobile Preview Dialog */}
-			{showPreview && selectedFile && (
-				<div className="md:hidden">
-					<PreviewDialog
-						file={selectedFile}
-						theme={selectedTheme}
-						expirationDays={expirationDays}
-						onClose={closePreview}
-					/>
+			{selectedFile && (
+				<div className={cn("hidden md:hidden", showPreview && "block")}>
+					<Suspense fallback={null}>
+						<PreviewDialog
+							file={selectedFile}
+							theme={selectedTheme}
+							expirationDays={expirationDays}
+							onClose={closePreview}
+						/>
+					</Suspense>
 				</div>
 			)}
 		</>
