@@ -20,6 +20,7 @@ interface UploadViewProps {
 	fileInputRef: RefObject<HTMLInputElement | null>;
 	isPreviewOpen: boolean;
 	isPreviewLoading: boolean;
+	turnstileToken: string | null;
 	onFileSelect: (file: File) => void;
 	onExpirationChange: (days: number) => void;
 	onThemeChange: (theme: string) => void;
@@ -36,6 +37,7 @@ export function UploadView({
 	fileInputRef,
 	isPreviewOpen,
 	isPreviewLoading,
+	turnstileToken,
 	onFileSelect,
 	onExpirationChange,
 	onThemeChange,
@@ -302,7 +304,12 @@ export function UploadView({
 						uploadError &&
 							"bg-red-500/10! border-red-500/50! text-red-500! shadow-none animate-shake",
 					)}
-					disabled={!selectedFile || isUploading || !!uploadError}
+					disabled={
+						!selectedFile ||
+						isUploading ||
+						!!uploadError ||
+						(import.meta.env.PROD && !turnstileToken)
+					}
 					onClick={onUpload}
 				>
 					{isUploading ? (

@@ -170,6 +170,7 @@ function Home() {
 								onPreview={togglePreview}
 								isPreviewOpen={showPreview}
 								isPreviewLoading={isPreviewLoading}
+								turnstileToken={turnstileToken}
 								onUpload={handleUpload}
 							/>
 						)}
