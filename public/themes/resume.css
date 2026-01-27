@@ -17,7 +17,10 @@ body {
 	line-height: 1.6;
 	max-width: 780px;
 	margin: 0 auto;
-	padding: 48px 40px;
+	padding-top: 88px;
+	padding-bottom: 48px;
+	padding-right: 24px;
+	padding-left: 24px;
 	background-color: var(--bg-root);
 	color: var(--text-primary);
 	-webkit-font-smoothing: antialiased;

@@ -284,11 +284,114 @@ const MetaTags = ({ title, description }: MetaTagsProps) => (
 
 interface ScriptsProps {
 	hasMermaid?: boolean;
+	hasToc?: boolean;
 }
 
-const Scripts = ({ hasMermaid }: ScriptsProps) => {
+const Scripts = ({ hasMermaid, hasToc }: ScriptsProps) => {
 	const themeToggleBody = getFunctionBody(initThemeToggle);
 	const exportActionsBody = getFunctionBody(initExportActions);
+	const tocScript = hasToc
+		? `
+		(function() {
+			try {
+				const body = document.body;
+				const content = document.querySelector(".content");
+				const toggleBtn = document.getElementById("toc-toggle");
+				const panel = document.getElementById("toc-panel");
+				const list = document.getElementById("toc-list");
+				const backdrop = document.getElementById("toc-backdrop");
+
+				if (!content || !toggleBtn || !panel || !list || !backdrop) return;
+
+				const headings = Array.from(
+					content.querySelectorAll(
+						"h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]",
+					),
+				);
+
+				if (headings.length === 0) {
+					toggleBtn.style.display = "none";
+					panel.style.display = "none";
+					backdrop.style.display = "none";
+					return;
+				}
+
+				const setExpanded = (expanded) => {
+					toggleBtn.setAttribute("aria-expanded", String(expanded));
+				};
+
+				const openToc = () => {
+					body.classList.add("toc-open");
+					setExpanded(true);
+				};
+				const closeToc = () => {
+					body.classList.remove("toc-open");
+					setExpanded(false);
+				};
+				const toggleToc = () => {
+					if (body.classList.contains("toc-open")) {
+						closeToc();
+					} else {
+						openToc();
+					}
+				};
+
+				const fragment = document.createDocumentFragment();
+
+				for (const heading of headings) {
+					const level = Number.parseInt(heading.tagName.slice(1), 10);
+					const text = heading.textContent?.trim();
+					const id = heading.id;
+					if (!text || !id) continue;
+
+					const item = document.createElement("li");
+					item.className = "toc-item";
+					item.setAttribute("data-level", String(level));
+
+					const link = document.createElement("a");
+					link.className = "toc-link";
+					link.href = \`#\${id}\`;
+					link.textContent = text;
+					link.addEventListener("click", () => {
+						closeToc();
+					});
+
+					item.appendChild(link);
+					fragment.appendChild(item);
+				}
+
+				list.innerHTML = "";
+				list.appendChild(fragment);
+
+				toggleBtn.addEventListener("click", (e) => {
+					e.stopPropagation();
+					toggleToc();
+				});
+
+				panel.addEventListener("click", (e) => {
+					e.stopPropagation();
+				});
+
+				backdrop.addEventListener("click", closeToc);
+
+				document.addEventListener("keydown", (e) => {
+					if (e.key === "Escape") {
+						closeToc();
+					}
+				});
+
+				document.addEventListener("click", (e) => {
+					if (!(e.target instanceof Node)) return;
+					if (body.classList.contains("toc-open") && !panel.contains(e.target)) {
+						closeToc();
+					}
+				});
+			} catch (e) {
+				console.error("TOC initialization failed", e);
+			}
+		})();
+	`
+		: "";
 
 	const mainScript = raw(`
 		(function() {
@@ -297,6 +400,7 @@ const Scripts = ({ hasMermaid }: ScriptsProps) => {
 		(function() {
 			${exportActionsBody}
 		})();
+		${tocScript}
 		(function() {
 			try {
 				const content = document.querySelector(".content");
@@ -433,6 +537,7 @@ export function ViewTemplate(options: CreateHtmlPageOptions) {
 	} = options;
 	const { themePath, hljsThemePath } = getThemePaths(theme);
 	const metaDescription = description || defaultDescription;
+	const isDefaultTheme = theme === "default";
 
 	return (
 		<html lang={lang || "en"}>
@@ -462,14 +567,49 @@ export function ViewTemplate(options: CreateHtmlPageOptions) {
 					/>
 				)}
 			</head>
-			<body>
+			<body class={`theme-${theme}`}>
 				<div class="top-actions">
 					<ExportButton markdown={markdown} />
 					<ThemeToggleButton show={theme !== "resume" && theme !== "matrix"} />
 				</div>
+				{isDefaultTheme && (
+					<>
+						<button
+							type="button"
+							class="toc-toggle"
+							id="toc-toggle"
+							aria-label="Toggle table of contents"
+							aria-controls="toc-panel"
+							aria-expanded="false"
+						>
+							<svg
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2"
+								aria-hidden="true"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M4 6h16M4 12h16M4 18h10"
+								/>
+							</svg>
+						</button>
+						<div class="toc-backdrop" id="toc-backdrop" />
+						<aside
+							class="toc-panel"
+							id="toc-panel"
+							aria-label="Table of contents"
+						>
+							<div class="toc-header">On this page</div>
+							<ul class="toc-list" id="toc-list" />
+						</aside>
+					</>
+				)}
 				<div class="content">{raw(htmlContent)}</div>
 				<Footer expiresAt={expiresAt} />
-				<Scripts hasMermaid={hasMermaid} />
+				<Scripts hasMermaid={hasMermaid} hasToc={isDefaultTheme} />
 			</body>
 		</html>
 	);
