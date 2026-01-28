@@ -87,12 +87,12 @@ body {
 	flex: 1;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
 	color: var(--text-primary);
 	margin-top: 2.5em;
 	margin-bottom: 0.75em;
@@ -101,33 +101,33 @@ h6 {
 	font-weight: 600;
 }
 
-h1:first-child {
+.content h1:first-child {
 	margin-top: 0;
 }
 
-h1 {
+.content h1 {
 	font-size: 2em;
 	letter-spacing: -0.03em;
 	border-bottom: 1px solid var(--border-subtle);
 	padding-bottom: 0.5em;
 }
-h2 {
+.content h2 {
 	font-size: 1.5em;
 }
-h3,
-h4,
-h5,
-h6 {
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
 	font-size: 1.25em;
 }
 
-p {
+.content p {
 	margin-bottom: 1.5em;
 	color: var(--text-primary);
 	opacity: 0.95;
 }
 
-code {
+.content code {
 	background-color: var(--code-bg);
 	padding: 2px 5px;
 	border-radius: 4px;
@@ -137,42 +137,42 @@ code {
 	border: 1px solid var(--code-border);
 }
 
-ul,
-ol {
+.content ul,
+.content ol {
 	margin-bottom: 1.5em;
 	padding-left: 1.5em;
 	color: var(--text-tertiary);
 }
 
-ul ul,
-ul ol,
-ol ul,
-ol ol {
+.content ul ul,
+.content ul ol,
+.content ol ul,
+.content ol ol {
 	margin-top: 0.5em;
 	margin-bottom: 0;
 }
 
-li {
+.content li {
 	margin-bottom: 0.5em;
 	color: var(--text-primary);
 }
 
-li p {
+.content li p {
 	margin: 0;
 }
 
-a {
+.content a {
 	color: var(--primary-color);
 	text-decoration: none;
 	border-bottom: 1px solid transparent;
 	transition: border-color 0.2s;
 }
 
-a:hover {
+.content a:hover {
 	border-color: var(--primary-color);
 }
 
-blockquote {
+.content blockquote {
 	border-left: 3px solid var(--primary-color);
 	margin: 0 0 1.5em 0;
 	padding-left: 1.2em;
@@ -180,7 +180,7 @@ blockquote {
 	font-style: italic;
 }
 
-table {
+.content table {
 	display: block;
 	width: 100%;
 	overflow-x: auto;
@@ -190,41 +190,41 @@ table {
 	font-size: 0.95em;
 }
 
-th,
-td {
+.content th,
+.content td {
 	padding: 10px;
 	border-bottom: 1px solid var(--border-subtle);
 	text-align: left;
 	white-space: nowrap;
 }
 
-th {
+.content th {
 	color: var(--text-primary);
 	font-weight: 600;
 }
 
-img {
+.content img {
 	max-width: 100%;
 	border-radius: 8px;
 	margin-bottom: 1.5em;
 }
 
-hr {
+.content hr {
 	border: none;
 	border-top: 1px solid var(--border-subtle);
 	margin: 3em 0;
 }
 
-li:has(input[type="checkbox"]),
-li.task-list-item {
+.content li:has(input[type="checkbox"]),
+.content li.task-list-item {
 	list-style-type: none;
 }
 
-ul:has(li input[type="checkbox"]) {
+.content ul:has(li input[type="checkbox"]) {
 	padding-left: 0;
 }
 
-input[type="checkbox"] {
+.content input[type="checkbox"] {
 	margin-left: 0;
 }
 
@@ -379,7 +379,6 @@ footer a:hover {
 	font-size: 13px;
 	line-height: 1.5;
 	transition: all 0.15s ease;
-	border: none;
 	border-radius: 6px;
 	position: relative;
 }
@@ -387,7 +386,6 @@ footer a:hover {
 .toc-link:hover {
 	color: var(--text-primary);
 	background-color: var(--bg-card);
-	border: none;
 }
 
 .toc-item[data-level="2"] .toc-link {
@@ -467,7 +465,6 @@ body.toc-open .toc-toggle {
 	}
 }
 
-/* Export container and button */
 .export-container {
 	position: relative;
 }
@@ -496,7 +493,6 @@ body.toc-open .toc-toggle {
 	height: 18px;
 }
 
-/* Export dropdown */
 .export-dropdown {
 	position: absolute;
 	top: calc(100% + 4px);
@@ -598,4 +594,59 @@ body.toc-open .toc-toggle {
 
 .mermaid {
 	text-align: center;
+}
+
+@media (min-width: 1280px) {
+	.toc-toggle,
+	.toc-backdrop {
+		display: none;
+	}
+
+	.toc-panel {
+		transform: none;
+		opacity: 1;
+		width: 240px;
+		left: calc(50% - 360px - 240px - 32px);
+		top: 88px;
+		bottom: auto;
+		height: auto;
+		max-height: calc(100vh - 160px);
+		background-color: transparent;
+		border: none;
+		box-shadow: none;
+		padding: 0;
+	}
+
+	.toc-header {
+		padding-left: 0;
+		margin-bottom: 12px;
+	}
+
+	.toc-link {
+		padding: 4px 0;
+		padding-left: 0;
+		border-radius: 0;
+		color: var(--text-tertiary);
+	}
+
+	.toc-item[data-level="2"] .toc-link {
+		padding-left: 0;
+	}
+	.toc-item[data-level="3"] .toc-link {
+		padding-left: 12px;
+	}
+	.toc-item[data-level="4"] .toc-link {
+		padding-left: 24px;
+	}
+	.toc-item[data-level="5"] .toc-link {
+		padding-left: 36px;
+	}
+	.toc-item[data-level="6"] .toc-link {
+		padding-left: 48px;
+	}
+
+	.toc-link:hover {
+		background-color: transparent;
+		color: var(--text-primary);
+	}
 }
